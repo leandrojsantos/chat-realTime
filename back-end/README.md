@@ -1,5 +1,5 @@
 <h1 align="center">
-    <a href="#" alt="">Chat em tempo real</a>
+    <a href="#" alt="">Back-end da aplicação usando Node.js</a>
 </h1>
 
 <h4 align="center">
