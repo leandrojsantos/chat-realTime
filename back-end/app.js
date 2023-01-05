@@ -1,13 +1,45 @@
-const express = require("express");
-const path = require("path");
-const http = require("http");
-import router from "./routes/usersRouter";
-import activeUsers from "./controller/chatServidor"
-
+require('dotenv').config();
+const express = require('express');
+const bodyParser = require('body-parser');
+const path = require('path');
+const http = require('http');
+const cors = require('cors');
+const socketIO = require('socket.io');
 const app = express();
- 
-//http server
 const server = http.createServer(app);
+const io = socketIO(server);
+
+const adminRoutes = require('./src/routes/usersRouter');
+const ADMIN = '/';
+
+app.use(cors());
+app.options('*', cors());
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.use(ADMIN, adminRoutes);
+
+const activeUsers = new Set();
+let roomId = '';
+
+io.on('connection', (socket) => {
+  socket.on('JOIN_ROOM', (room) => {
+    roomId = room;
+    socket.join(room);
+  });
+
+  socket.on('NEW_MESSAGE', (msg) => {
+    io.to(roomId).emit('NEW_MESSAGE', msg);
+  });
+
+  socket.on('disconnect', () => {
+    activeUsers.delete(socket.userId);
+    io.to(roomId).emit('user disconnected', socket.userId);
+  });
+});
+
 const PORT = process.env.PORT || 3000;
-console.log('API UP!!! IN LOCALHOST PORT:', PORT);
+console.log('Server listening on PORT: ', PORT);
 server.listen(PORT);
