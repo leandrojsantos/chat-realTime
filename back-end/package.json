@@ -1,19 +1,18 @@
 {
-  "name": "back-end",
+  "name": "back-end-node",
   "version": "1.0.0",
-  "description": "<h1 align=\"center\">     <a href=\"#\" alt=\"\">Back-end da aplicação usando Node.js</a> </h1>",
-  "main": "index.js",
+  "description": "chat-real-time",
+  "main": "app.js",
   "scripts": {
     "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
+  "devDependencies":{
     "body-parser": "^1.20.1",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.0.3"
+  },
+  "dependencies": {
     "express": "^4.18.2",
     "nodemon": "^2.0.20",
     "socket.io": "^4.5.4"

@@ -9,8 +9,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
-const adminRoutes = require('./src/routes/usersRouter');
-const ADMIN = '/';
+const userRoutes = require('./src/routes/userRouter');
 
 app.use(cors());
 app.options('*', cors());
@@ -18,8 +17,6 @@ app.options('*', cors());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-app.use(ADMIN, adminRoutes);
 
 const activeUsers = new Set();
 let roomId = '';
