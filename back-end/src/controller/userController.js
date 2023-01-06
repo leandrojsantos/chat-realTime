@@ -1,5 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
-const userRules = require('./usersRules');
+const userRule = require('./userRule');
 
 const getRoom = (req, res) => {
   const randomGenUniqueName = uuidv4();
@@ -8,12 +8,13 @@ const getRoom = (req, res) => {
 
 const postAddUser = (req, res) => {
   const { name } = req.body;
-  const userRules = new User(null, name);
-  userRules.save();
+  const userRule = new User(null, name);
+  userRule.save();
   res.status(200).send({ success: true, msg: 'Usuario adicionado' });
 };
 
 module.exports = {
   postAddUser,
   getRoom,
+
 };
