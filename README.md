@@ -3,7 +3,7 @@
 </h1>
 
 <h4 align="center">
-	🚧 Em produção 🚧
+	🚧 finalizado 🚧
 </h4>
 
 <p align="center">
@@ -13,19 +13,30 @@
  <a href="#como-executar-o-projeto">Como executar o projeto</a> • 
  <a href="#pré-requisitos">Pré-requisitos</a> •
  <a href="#rodando-o-projeto">Rodando o projeto</a> •
- <a href="#tecnologias">Tecnologias</a> 
+ <a href="#tecnologias">Tecnologias</a> •
+ <a href="#anexos">Anexos</a>
 </p>
 
 ## Sobre o projeto
 Desenvolver uma aplicação web que seja capaz de funcionar como
 um chat aberto, sem a necessidade de cadastro prévio de usuário
 Para participar da sala como observador, o usuário precisa inserir uma
-identificação nome. Ou seja um chat com variás salas e com usuarios 
+identificação nome. Ou seja um chat com variás salas e com usuários 
 se comunicando em tempo real
 
-### Funcionalidades do projeto 
+### Funcionalidades e requesitos do projeto 
 
-- [x] foi feita....
+- [x] chat em tempo real
+- [x] back-end em node.js
+- [x] front-end em react
+- [x] uso do design pattern observer
+- [x] entrada de user somente com email diferente no mesmo chat
+- [x] usuário deverá visualizar novas mensagens enviadas
+- [x] usuário alertado quando outro usuário entrar/ou sair da sala
+- [x] estrutura onde é possível ter vários chats/salas
+- [x] chat em tempo realmpo real
+- [x] chat representa uma url na
+aplicação.
 
 ---
 ## Layout
@@ -33,7 +44,7 @@ se comunicando em tempo real
 O layout da aplicação:
 
 <p align="center" style="display: flex; align-items: flex-start; justify-content: center;">
-  <img alt="img1" title="#img1" src="./assets" width="400px">
+  <img alt="fluxo" title="#fluxo" src="./assets/fluxo.png" width="400px">
 </p>
 
 ---
@@ -41,9 +52,12 @@ O layout da aplicação:
     - Seguir o README.md primeiro pasta back-end, em seguida o README.md pasta front-end 
 ### Pré-requisitos
     - ter ide para codificar
-    - node
+    - noções de node
     - browser ou postman
-    - react
+    - noções de react
+    - noções de git
+    - noções de clear code
+    - noções de design pattern
 
 ### Rodando o projeto
 
@@ -57,7 +71,7 @@ O layout da aplicação:
 ---
 ## Tecnologias do projeto
 
-As seguintes ferramentas foram usadas na construção do projeto:
+As principais foram usadas na construção do projeto:
  
 ```bash
     "react": "^18.2.0", //front-end da aplicação
@@ -70,6 +84,12 @@ As seguintes ferramentas foram usadas na construção do projeto:
     "socket.io-client": "^4.5.4",// comunicação e montagem do chat
 ```
 
+## Anexos
 
+Documentos para auxiliar no projeto:
 
+```bash
+    - Foi criada como boas prática uma branch onde se destina ao development de novas featuares, 
+    assim quer a fetuares for concluida fazer merge com branch master onde fica o projeto, sem erro e com versão antes da nova featuare. 
 
+```
