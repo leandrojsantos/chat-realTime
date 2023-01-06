@@ -38,5 +38,5 @@ io.on('connection', (socket) => {
 });
 
 const PORT = process.env.PORT || 3000;
-console.log('Server listening on PORT: ', PORT);
+console.log('API UP PORT!!!: ', PORT);
 server.listen(PORT);
