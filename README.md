@@ -63,8 +63,11 @@ O layout da aplicação:
 
 ```bash
 
-- Como dito acima é necessário estar primeiro com back-end ok, em seguida do front-end ok
-- Cada um contém um README.md como esse explicando como fazer para colocar a sua parte do projeto e assim rodando o projeto 
+- Como dito acima é necessário estar primeiro com back-end ok, 
+em seguida do front-end ok
+- Cada um contém um README.md como esse explicando como fazer,
+ para colocar a sua parte do projeto e assim com as duas partes ok e 
+ sem erros o projeto iniciará 
 
 ```
 
@@ -89,7 +92,9 @@ As principais foram usadas na construção do projeto:
 Documentos para auxiliar no projeto:
 
 ```bash
-    - Foi criada como boas prática uma branch onde se destina ao development de novas featuares, 
-    assim quer a fetuares for concluida fazer merge com branch master onde fica o projeto, sem erro e com versão antes da nova featuare. 
+    - Foi criada como boas práticas uma branch onde se destina,
+     ao development de novas funcionalidade, assim quando criar uma nova
+     funcionalidade e for concluída sem erros ou regras de negócio.
+     Fazer merge com branch master com projeto original, com versão antes da nova funcionalidade. 
 
 ```

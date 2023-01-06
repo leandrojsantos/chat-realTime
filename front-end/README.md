@@ -52,6 +52,8 @@ O layout da aplicação:
  2 - ter a certeza que back-end esta funcioado sem erros
  3 - intalando as dependencies na pasta front-end e nela use o comando 'npm install'
  4 - start no back-end para verificar se algo de errado 'npm run start'
+ 5 - após isso o react pergunta se quer abrir o app usando outra porta,
+ pois a '3000' está sendo usada pelo back-end coloque sim 
 
 
 ```
@@ -83,8 +85,8 @@ Documentos para auxiliar no projeto:
 
 ```bash
 
- - Sempre que for debbugar inicialize o projeto em package.json, clique depurar e 
- escolha a opção 'start'
+ - Sempre que for debbugar inicialize o projeto em package.json, 
+ clique depurar e escolha a opção 'start'
 
 ```
 

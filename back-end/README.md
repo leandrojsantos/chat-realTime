@@ -51,6 +51,7 @@ O layout da aplicação:
  1 - ter node instalado 
  2 - intalando as dependencies na pasta back-end e nela use o comando 'npm install'
  3 - start no back-end para verificar se algo de errado 'npm run start'
+ 4 - abrir no navegador em 'http://localhost:3000'
 
  obs: para desenvolvimento sugiro, start no back-end para verificar se algo de errado 'npm run dev'
 
@@ -79,7 +80,9 @@ Documentos para auxiliar no projeto:
 ```bash
 
 ***DICAS: sobre app.js e fluxo dele 
- Criando conexão de socket, um ​​socket é um ponto final de um link de comunicação bidirecional entre dois programas em execução na rede. Com um endpoint é uma combinação de um endereço IP e número de porta torna um chat em tempo real.
+ Criando conexão de socket, um ​​socket é um ponto final de um link de comunicação bidirecional entre dois programas em execução na rede. 
+ 
+ Com um endpoint é uma combinação de um endereço IP e número de porta torna um chat em tempo real.
 
 /**  
  * 1 - Para emitir um evento do seu cliente, use a função “emit” no objeto socket
