@@ -27,7 +27,7 @@
 O layout da aplicação:
 
 <p align="center" style="display: flex; align-items: flex-start; justify-content: center;">
-  <img alt="back1" title="#back1" src="./asserts/back1.png" width="400px">
+  <img alt="back1" title="#back1" src="./assets/back1.png" width="400px">
 </p>
 
 ---
@@ -36,8 +36,6 @@ O layout da aplicação:
     - ter ide para codificar
     - noções de node
     - browser ou postman
-    - noções de react
-    - noções de git
     - noções de clear code
     - noções de design pattern
 
@@ -64,6 +62,7 @@ O layout da aplicação:
 As principais foram usadas na construção do projeto:
  
 ```bash
+
     "dotenv": "^16.0.3", //lida com variavel de ambiente
     "express": "~4.18.2", //criar um servidor http
     "node": "v18.12.0", //back end da aplicação
@@ -71,6 +70,7 @@ As principais foram usadas na construção do projeto:
     "npm": "8.19.2" //gerecia pacotes do node
     "browser" //ver as requisições
     "socket.io-client": "^4.5.4",// comunicação e montagem do chat
+
 ```
 
 ## Anexos
@@ -79,18 +79,17 @@ Documentos para auxiliar no projeto:
 
 ```bash
 
-***DICAS: sobre app.js e fluxo dele 
- Criando conexão de socket, um ​​socket é um ponto final de um link de comunicação bidirecional entre dois programas em execução na rede. 
+ Criando conexão de socket, um ​​socket é um ponto final de um link
+ de comunicação bidirecional em execução na mesma rede. 
+ Com um endpoint é uma combinação de um endereço IP,
+ e número de porta torna um chat em tempo real.
+
+*Dicas: sobre socket.io 
+ 1 - Para emitir um evento do seu cliente, use a função “emit” no objeto socket
+ 2 - Para lidar com esses eventos, use a função “on” no	no objeto socket
+ 3 - Criar um evento NEW_MESSAGE ele será usado para envia mensagens do lado do cliente.
+ 4 - Ouça NEW_MESSAGE para receber novas mensagens
  
- Com um endpoint é uma combinação de um endereço IP e número de porta torna um chat em tempo real.
-
-/**  
- * 1 - Para emitir um evento do seu cliente, use a função “emit” no objeto socket
- * 2 - Para lidar com esses eventos, use a função “on” no	no objeto socket
- * 3 - Criar um evento NEW_MESSAGE. Ele será usado para envia mensagens do lado do cliente.
- *4 - Ouça NEW_MESSAGE para receber novas mensagens
- * */
-
  - Sempre que for debbugar inicialize o projeto com 'npm run dev'
 
 ```
