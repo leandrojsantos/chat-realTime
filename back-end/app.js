@@ -1,42 +1,36 @@
-require('dotenv').config();
-const express = require('express');
-const bodyParser = require('body-parser');
-const path = require('path');
-const http = require('http');
-const cors = require('cors');
-const socketIO = require('socket.io');
+const express = require("express");
 const app = express();
-const server = http.createServer(app);
-const io = socketIO(server);
-
-const userRoutes = require('./src/routes/userRouter');
-
+const http = require("http");
+const cors = require("cors");
+const { Server } = require("socket.io");
 app.use(cors());
-app.options('*', cors());
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+const server = http.createServer(app);
 
-const activeUsers = new Set();
-let roomId = '';
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+  },
+});
 
-io.on('connection', (socket) => {
-  socket.on('JOIN_ROOM', (room) => {
-    roomId = room;
-    socket.join(room);
+io.on("connection", (socket) => {
+  console.log(`User Connected: ${socket.id}`);
+
+  socket.on("join_room", (data) => {
+    socket.join(data);
+    console.log(`User with ID: ${socket.id} joined room: ${data}`);
   });
 
-  socket.on('NEW_MESSAGE', (msg) => {
-    io.to(roomId).emit('NEW_MESSAGE', msg);
+  socket.on("send_message", (data) => {
+    socket.to(data.room).emit("receive_message", data);
   });
 
-  socket.on('disconnect', () => {
-    activeUsers.delete(socket.userId);
-    io.to(roomId).emit('user disconnected', socket.userId);
+  socket.on("disconnect", () => {
+    console.log("User Disconnected", socket.id);
   });
 });
 
-const PORT = process.env.PORT || 3000;
-console.log('API UP PORT!!!: ', PORT);
-server.listen(PORT);
+server.listen(3001, () => {
+  console.log("API UP !!!");
+});
