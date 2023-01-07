@@ -28,6 +28,11 @@ O layout da aplicação:
 
 <p align="center" style="display: flex; align-items: flex-start; justify-content: center;">
   <img alt="back1" title="#back1" src="./assets/back1.png" width="400px">
+
+</p>
+
+<p align="center" style="display: flex; align-items: flex-start; justify-content: center;">
+  <img alt="back2" title="#back2" src="./assets/back2.png" width="400px">
 </p>
 
 ---
@@ -36,6 +41,7 @@ O layout da aplicação:
     - ter ide para codificar
     - noções de node
     - browser ou postman
+    - noções de git
     - noções de clear code
     - noções de design pattern
 
@@ -43,7 +49,7 @@ O layout da aplicação:
 
 ```bash
 1 - clone repositorio do github
-2 - ter node instalado na maquina
+2 - ter node instalado 
 
  *subindo back-end:
  1 - ter node instalado 
@@ -80,9 +86,16 @@ Documentos para auxiliar no projeto:
 ```bash
 
  Criando conexão de socket, um ​​socket é um ponto final de um link
- de comunicação bidirecional em execução na mesma rede. 
- Com um endpoint é uma combinação de um endereço IP,
- e número de porta torna um chat em tempo real.
+ de comunicação bidirecional entre na mesma rede. 
+ 
+ Com um endpoint é uma combinação de um endereço IP e 
+ número de porta torna um chat em tempo real.
+
+ Dica: sobre socket.io
+ 1 - Para emitir um evento do seu cliente, use a função “emit” no objeto socket
+ 2 - Para lidar com esses eventos, use a função “on” no	no objeto socket
+ 3 - Criar um evento NEW_MESSAGE ele será usado para envia mensagens do lado do cliente.
+ 4 - Ouça NEW_MESSAGE para receber novas mensagens
 
 *Dicas: sobre socket.io 
  1 - Para emitir um evento do seu cliente, use a função “emit” no objeto socket
