@@ -18,11 +18,7 @@
 </p>
 
 ## Sobre o projeto
-Desenvolver uma aplicação web que seja capaz de funcionar como
-um chat aberto, sem a necessidade de cadastro prévio de usuário
-Para participar da sala como observador, o usuário precisa inserir uma
-identificação nome. Ou seja um chat com variás salas e com usuários 
-se comunicando em tempo real
+Desenvolver uma aplicação web que seja capaz de funcionar como um chat aberto, o usuário precisa inserir uma identificação nome, email e data de nascimento. Ou seja um chat com variás salas e com usuários se comunicando em tempo real
 
 ### Funcionalidades e requesitos do projeto 
 
@@ -49,7 +45,7 @@ O layout da aplicação:
 
 ---
 ## Como executar o projeto
-    - Seguir o README.md primeiro pasta back-end, em seguida o README.md pasta front-end 
+    - Seguir o 'README.md' primeiro pasta back-end, em seguida o 'README.md' pasta front-end 
 ### Pré-requisitos
     - ter ide para codificar
     - noções de node
@@ -63,8 +59,13 @@ O layout da aplicação:
 
 ```bash
 
-- Como dito acima é necessário estar primeiro com back-end ok, em seguida do front-end ok
-- Cada um contém um README.md como esse explicando como fazer para colocar a sua parte do projeto e assim rodando o projeto 
+- Como dito acima é necessário estar primeiro com back-end ok, 
+ em seguida do front-end ok
+- Cada um contém um 'README.md' como esse explicando como esse,
+ para colocar a sua parte do projeto e assim com as duas partes ok e 
+ sem erros o projeto iniciará 
+- No 'README.md' do front-end, contém também uma explicação para iniciar,
+ uma converva usando o chat
 
 ```
 
@@ -89,7 +90,11 @@ As principais foram usadas na construção do projeto:
 Documentos para auxiliar no projeto:
 
 ```bash
-    - Foi criada como boas prática uma branch onde se destina ao development de novas featuares, 
-    assim quer a fetuares for concluida fazer merge com branch master onde fica o projeto, sem erro e com versão antes da nova featuare. 
+    - Foi criada como boas práticas uma branch a 'development' 
+    onde se destina, ao  programador desevolvimento/testar novas funcionalidade, 
+    assim quando criar uma nova funcionalidade e for concluída sem erros ou 
+    regras de negócio para se testar, não afetar projeto em produção .
+    - Ao terminar o desevolvimento, sem erros fazer merge com branch master onde fica,
+    projeto original com versão antes da nova funcionalidade. 
 
 ```
