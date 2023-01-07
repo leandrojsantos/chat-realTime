@@ -27,7 +27,11 @@
 O layout da aplicação:
 
 <p align="center" style="display: flex; align-items: flex-start; justify-content: center;">
-  <img alt="front1" title="#front1" src="./src/assets/images/front1.png" width="400px">
+  <img alt="login" title="#login" src="./src/assets/images/login.png" width="400px">
+</p>
+
+<p align="center" style="display: flex; align-items: flex-start; justify-content: center;">
+  <img alt="conversa" title="#conversa" src="./src/assets/images/conversa.png" width="400px">
 </p>
 
 ---
@@ -51,16 +55,14 @@ O layout da aplicação:
  2 - ter a certeza que back-end esta funcioado sem erros
  3 - intalando as dependencies na pasta front-end e nela use o comando 'npm install'
  4 - start no back-end para verificar se algo de errado 'npm run start'
- 5 - após isso o react pergunta se quer abrir o app usando outra porta,
- pois a '3000' está sendo usada pelo back-end coloque sim 
- 6 - se tudo estiver ok projeto vai iniciar sozinho na url 'http://localhost:3000'
- 7 - no projeto ele pedirá: nome, email, data de nascimento e nome da sala 
+ 5 - se tudo estiver ok projeto vai iniciar sozinho na url 'http://localhost:3000'
+ 6 - no projeto ele pedirá: nome, email, data de nascimento e nome da sala 
 
  **entrando em uma sala e iniciando. uma conversa
  1 - com aplicação na ok na na url 'http://localhost:3000'
  2 - abra outra janela na url 'http://localhost:3000'
  3 - no projeto ele pedirá: nome, email, data de nascimento e nome da sala, 
- no nome da sala coloque a que esta o usuário que iniciou o projeto
+ no nome da sala 
  4 - mande uma mensagem para e ele a voce se tudo estiver ok, ocorre a conversa 
 
  obs: para conversa ocorrer tem estar 
@@ -78,15 +80,14 @@ As principais foram usadas na construção do projeto:
  
 ```bash
 
-    "@testing-library/jest-dom": "^5.16.5", //
-    "@testing-library/react": "^13.4.0", //
+    "@testing-library/jest-dom": "^5.16.5", //biblioteca de testes
+    "@testing-library/react": "^13.4.0", //biblioteca de testes
     "@testing-library/user-event": "^14.4.3", //
-    "react": "^18.2.0", // 
-    "react-dom": "^18.2.0", //
-    "react-scripts": "5.0.1", //
-    "react-scroll-to-bottom": "^4.2.0", //
-    "socket.io-client": "^4.5.4", //
-    "web-vitals": "^3.1.0" //
+    "react": "^18.2.0", //faz a parte do front end 
+    "react-dom": "^18.2.0", //biblioteca do react
+    "react-scripts": "5.0.1", //biblioteca do react
+    "react-scroll-to-bottom": "^4.2.0", //biblioteca do react
+    "socket.io-client": "^4.5.4", //fazer conexão entre socket
 
 ```
 

@@ -30,6 +30,10 @@ O layout da aplicação:
   <img alt="back1" title="#back1" src="./assets/back1.png" width="400px">
 </p>
 
+<p align="center" style="display: flex; align-items: flex-start; justify-content: center;">
+  <img alt="back2" title="#back2" src="./assets/back2.png" width="400px">
+</p>
+
 ---
 
 ### Pré-requisitos

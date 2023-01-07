@@ -31,8 +31,7 @@ Desenvolver uma aplicação web que seja capaz de funcionar como um chat aberto,
 - [x] usuário alertado quando outro usuário entrar/ou sair da sala
 - [x] estrutura onde é possível ter vários chats/salas
 - [x] chat em tempo realmpo real
-- [x] chat representa uma url na
-aplicação.
+- [x] chat representa uma url na aplicação.
 
 ---
 ## Layout

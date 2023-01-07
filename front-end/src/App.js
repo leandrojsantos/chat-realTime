@@ -1,17 +1,19 @@
 import "./App.css";
 import io from "socket.io-client";
 import { useState } from "react";
-import Chat from "./Chat";
+import Chat from "./components/chatComponent";
 
 const socket = io.connect("http://localhost:3001");
 
 function App() {
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [dateBirthDay, setDateBirthDay] = useState("")
   const [room, setRoom] = useState("");
   const [showChat, setShowChat] = useState(false);
 
   const joinRoom = () => {
-    if (username !== "" && room !== "") {
+    if (email !== "" && room !== "") {
       socket.emit("join_room", room);
       setShowChat(true);
     }
@@ -33,14 +35,14 @@ function App() {
             type="text"
             placeholder="Email..."
             onChange={(event) => {
-              setUsername(event.target.value);
+              setEmail(event.target.value);
             }}
           />
           <input
             type="text"
             placeholder="Data de nascimento..."
             onChange={(event) => {
-              setUsername(event.target.value);
+              setDateBirthDay(event.target.value);
             }}
           />
           <input
@@ -53,7 +55,7 @@ function App() {
           <button onClick={joinRoom}>Entre</button>
         </div>
       ) : (
-        <Chat socket={socket} username={username} room={room} />
+        <Chat socket={socket} username={username} email={email} dateBirthDay={dateBirthDay} room={room} />
       )}
     </div>
   );

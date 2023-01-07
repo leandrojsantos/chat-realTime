@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
 
-function Chat({ socket, username, room }) {
+function ChatComponent({ socket, username, email, dateBirthDay, room }) {
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
 
@@ -10,6 +10,8 @@ function Chat({ socket, username, room }) {
       const messageData = {
         room: room,
         author: username,
+        email: email,
+        dateBirthDay: dateBirthDay,
         message: currentMessage,
         time:
           new Date(Date.now()).getHours() +
@@ -32,7 +34,8 @@ function Chat({ socket, username, room }) {
   return (
     <div className="chat-window">
       <div className="chat-header">
-        <p>chat em tempo real</p>
+        <p>Nome da sala: {room} </p>
+        <p>Link do chat:  localhost:3000  </p>
       </div>
       <div className="chat-body">
         <ScrollToBottom className="message-container">
@@ -74,4 +77,4 @@ function Chat({ socket, username, room }) {
   );
 }
 
-export default Chat;
+export default ChatComponent;

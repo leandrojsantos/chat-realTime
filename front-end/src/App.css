@@ -59,8 +59,8 @@ body {
   margin: 0;
 }
 .chat-window .chat-header {
-  height: 45px;
-  border-radius: 6px;
+  height: 100px;
+  border-radius: 10px;
   background: #263238;
   position: relative;
   cursor: pointer;
