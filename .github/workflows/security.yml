@@ -1,0 +1,56 @@
+name: Security Scan
+
+on:
+  schedule:
+    - cron: '0 2 * * 1' # Toda segunda-feira às 2h
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  security-scan:
+    name: Security Vulnerability Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'yarn'
+        cache-dependency-path: 'back-end/yarn.lock'
+
+    - name: Install dependencies
+      working-directory: ./back-end
+      run: yarn install --frozen-lockfile
+
+    - name: Run Snyk to check for vulnerabilities
+      uses: snyk/actions/node@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        args: --severity-threshold=high --file=package.json
+
+    - name: Run yarn audit
+      working-directory: ./back-end
+      run: yarn audit --level moderate
+
+    - name: Run OWASP Dependency Check
+      uses: dependency-check/Dependency-Check_Action@main
+      with:
+        project: 'chat-backend'
+        path: './back-end'
+        format: 'JSON'
+        args: >
+          --enableRetired
+          --enableExperimental
+
+    - name: Upload security scan results
+      uses: actions/upload-artifact@v3
+      with:
+        name: security-scan-results
+        path: ./back-end/reports/

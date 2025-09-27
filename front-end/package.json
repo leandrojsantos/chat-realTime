@@ -1,7 +1,8 @@
 {
-  "name": "chat-app-react",
-  "version": "1.0.0",
-  "description": "chat-real-time",
+  "name": "chat-frontend",
+  "version": "2.0.0",
+  "description": "Chat em tempo real - Frontend React",
+  "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -17,7 +18,17 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint src/**/*.{js,jsx}",
+    "lint:fix": "eslint src/**/*.{js,jsx} --fix",
+    "format": "prettier --write src/**/*.{js,jsx}",
+    "analyze": "yarn build && npx bundle-analyzer build/static/js/*.js",
+    "install:clean": "yarn install --frozen-lockfile",
+    "upgrade": "yarn upgrade-interactive --latest"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "yarn": ">=4.0.0"
   },
   "eslintConfig": {
     "extends": [
@@ -35,6 +46,30 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "eslint": "^8.55.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^3.1.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "yarn test && yarn lint"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx}": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
     ]
   }
 }
