@@ -348,12 +348,3 @@ Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICE
 - [Conventional Commits](https://www.conventionalcommits.org/)
 - [Node.js Best Practices](https://github.com/goldbergyoni/nodebestpractices)
 
----
-
-<div align="center">
-
-**Desenvolvido com ❤️ para 2025**
-
-[⬆ Voltar ao topo](#-chat-em-tempo-real---2025-edition)
-
-</div>
