@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   mongodb:
@@ -46,6 +46,7 @@ services:
       - redis
     networks:
       - chat-network
+    command: yarn start
 
   frontend:
     build:
@@ -61,6 +62,7 @@ services:
       - backend
     networks:
       - chat-network
+    command: yarn start
 
 volumes:
   mongodb_data:

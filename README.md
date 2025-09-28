@@ -78,3 +78,19 @@ chat-realTime/
 - **Animações** suaves
 - **Tipografia** Inter
 - **Cores** vibrantes e acessíveis
+
+## 🔧 **Desenvolvimento**
+
+### Backend
+```bash
+cd back-end
+yarn install
+yarn dev  # Com nodemon
+```
+
+### Frontend
+```bash
+cd front-end
+yarn install
+yarn start
+```

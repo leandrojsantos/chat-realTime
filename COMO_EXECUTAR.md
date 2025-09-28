@@ -63,15 +63,15 @@ chat-realTime/
 ### somente Backend
 ```bash
 cd back-end
-npm install
-npm run dev
+yarn install
+yarn dev
 ```
 
-### somnete Frontend
+### somente Frontend
 ```bash
 cd front-end
-npm install
-npm start
+yarn install
+yarn start
 ```
 
 ## 🐛 **Problemas Comuns**

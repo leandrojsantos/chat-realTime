@@ -4,8 +4,8 @@
   "description": "Chat em tempo real - Backend com Clean Architecture",
   "main": "src/app.js",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
+    "start": "yarn node src/app.js",
+    "dev": "yarn nodemon src/app.js"
   },
   "engines": {
     "node": ">=20.0.0"
