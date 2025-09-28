@@ -1,14 +1,33 @@
-# 💬 Chat RealTime - Simples e Eficiente
+# 💬 Chat RealTime - Comunicação em Tempo Real
+
 
 
 ## 🎯 **Funcionalidades**
 
-- ✅ Chat em tempo real com Socket.IO
-- ✅ Interface moderna e responsiva
-- ✅ Dashboard administrativo
-- ✅ API REST completa
-- ✅ MongoDB + Redis
-- ✅ Design 2025 com glassmorphism
+### 💬 **Chat em Tempo Real**
+- Comunicação instantânea via Socket.IO
+- Indicadores de digitação em tempo real
+- Status de conexão dos usuários
+- Mensagens do sistema (entrada/saída)
+
+### 📊 **Dashboard Administrativo**
+- Métricas em tempo real
+- Monitoramento de usuários ativos
+- Estatísticas de mensagens
+- Interface administrativa completa
+
+### 🔧 **API REST Completa**
+- Endpoints para usuários, salas e mensagens
+- Documentação Swagger automática
+- Health checks e monitoramento
+- Rate limiting e segurança
+
+### 🗄️ **Banco de Dados**
+- MongoDB para persistência
+- Redis para cache e sessões
+- Estrutura escalável e performática
+
+---
 
 ## 🚀 **Execução Rápida**
 
@@ -25,72 +44,18 @@ podman-compose up -d
 # Admin: http://localhost:3001/admin
 ```
 
+> **Nota**: Para instruções detalhadas, consulte [COMO_EXECUTAR.md](./COMO_EXECUTAR.md)
+
+---
 
 ## 🌐 **Acessos**
 
-- **Frontend**: http://localhost:3000
-- **Backend**: http://localhost:3001
-- **API Docs**: http://localhost:3001/api-docs
-- **Admin Dashboard**: http://localhost:3001/admin
-- **Health Check**: http://localhost:3001/health
+| Serviço | URL | Descrição |
+|---------|-----|-----------|
+| **Frontend** | http://localhost:3000 | Interface do usuário |
+| **Backend** | http://localhost:3001 | API REST |
+| **Admin Dashboard** | http://localhost:3001/admin | Painel administrativo |
+| **API Docs** | http://localhost:3001/api-docs | Documentação Swagger |
+| **Health Check** | http://localhost:3001/health | Status da aplicação |
 
-## 🏗️ **Estrutura**
-
-```
-chat-realTime/
-├── back-end/              # API Node.js
-│   ├── src/
-│   │   ├── app.js         # Aplicação principal
-│   │   └── routes/        # Rotas da API
-│   ├── views/             # Dashboard admin
-│   └── package.json
-├── front-end/             # React App
-│   ├── src/
-│   │   ├── App.js         # Aplicação principal
-│   │   ├── components/    # Componentes
-│   │   └── App.css        # Estilos
-│   └── package.json
-├── docker-compose.yml     # Orquestração
-└── README.md
-```
-
-## 🛠️ **Stacks**
-
-### Backend
-- **Node.js** + **Express.js**
-- **Socket.IO** para tempo real
-- **MongoDB** + **Redis**
-- **Swagger** para documentação
-
-### Frontend
-- **React 18** + **Socket.IO Client**
-- **CSS moderno** com glassmorphism
-- **Design responsivo**
-
-### Infraestrutura
-- **Podman** + **Podman Compose**
-- **Multi-stage Dockerfiles**
-
-## 🎨 **Design 2025**
-
-- **Glassmorphism** com blur e transparência
-- **Gradientes** modernos
-- **Animações** suaves
-- **Tipografia** Inter
-- **Cores** vibrantes e acessíveis
-
-## 🔧 **Desenvolvimento**
-
-### Backend
-```bash
-cd back-end
-yarn install
-yarn dev  # Com nodemon
-```
-
-### Frontend
-```bash
-cd front-end
-yarn install
-yarn start
-```
+---

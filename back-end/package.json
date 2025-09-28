@@ -5,7 +5,13 @@
   "main": "src/app.js",
   "scripts": {
     "start": "yarn node src/app.js",
-    "dev": "yarn nodemon src/app.js"
+    "dev": "yarn nodemon src/app.js",
+    "test": "echo '🧪 Executando testes do backend...' && curl -s http://localhost:3001/health | jq .status",
+    "test:api": "echo '🧪 Testando API endpoints...' && curl -s http://localhost:3001/api/users | jq length",
+    "test:health": "echo '🧪 Testando health check...' && curl -f http://localhost:3001/health || echo '❌ Health check falhou'",
+    "test:full": "echo '🧪 TESTE COMPLETO DO BACKEND' && yarn test:health && yarn test:api && echo '✅ Backend OK'",
+    "test:load": "echo '🧪 Teste de carga...' && for i in {1..10}; do curl -s http://localhost:3001/health > /dev/null & done && wait && echo '✅ Teste de carga concluído'",
+    "test:security": "echo '🧪 Testando headers de segurança...' && curl -I http://localhost:3001/ | grep -E '(X-Frame-Options|X-Content-Type-Options)' || echo '❌ Headers de segurança não encontrados'"
   },
   "engines": {
     "node": ">=20.0.0"

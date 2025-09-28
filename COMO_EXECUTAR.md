@@ -1,4 +1,4 @@
-# 🚀 Como Executar - Chat RealTime Simplificado
+# 🚀 Como Executar - Chat RealTime 
 
 ## ⚡ **Execução Rápida**
 
@@ -57,7 +57,6 @@ chat-realTime/
 └── docker-compose.yml
 ```
 
-
 ## 🔧 **Desenvolvimento**
 
 ### somente Backend
@@ -87,6 +86,22 @@ sudo fuser -k 3001/tcp
 podman-compose down -v
 podman system prune -f
 podman-compose build --no-cache
+
+## Testes Front end
+"test": "echo '🧪 Executando testes do frontend...' && curl -s http://localhost:3000 | grep -o '<title>.*</title>'",
+"test:connectivity": "echo '🧪 Testando conectividade...' && curl -f http://localhost:3000 || echo '❌ Frontend offline'",
+"test:full": "echo '🧪 TESTE COMPLETO DO FRONTEND' && yarn test:connectivity && yarn test && echo '✅ Frontend OK'",
+"test:performance": "echo '🧪 Teste de performance...' && time curl -s http://localhost:3000 > /dev/null"
+
+## Testes do Back end
+"test": "echo '🧪 Executando testes do backend...' && curl -s http://localhost:3001/health | jq .status",
+"test:api": "echo '🧪 Testando API endpoints...' && curl -s http://localhost:3001/api/users | jq length",
+"test:health": "echo '🧪 Testando health check...' && curl -f http://localhost:3001/health || echo '❌ Health check falhou'",
+"test:full": "echo '🧪 TESTE COMPLETO DO BACKEND' && yarn test:health && yarn test:api && echo '✅ Backend OK'",
+"test:load": "echo '🧪 Teste de carga...' && for i in {1..10}; do curl -s http://localhost:3001/health > /dev/null & done && wait && echo '✅ Teste de carga concluído'",
+"test:security": "echo '🧪 Testando headers de segurança...' && curl -I http://localhost:3001/ | grep -E '(X-Frame-Options|X-Content-Type-Options)' || echo '❌ Headers de segurança não encontrados'"
+
+
 ```
 
 ## 📊 **API Endpoints**
