@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # Banco de dados MongoDB
+  # MongoDB Database
   mongodb:
     image: mongo:7.0
     container_name: chat-mongodb
@@ -14,11 +14,15 @@ services:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
-      - ./back-end/scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     networks:
       - chat-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
-  # Redis para cache e sessões
+  # Redis Cache
   redis:
     image: redis:7.2-alpine
     container_name: chat-redis
@@ -29,6 +33,11 @@ services:
       - redis_data:/data
     networks:
       - chat-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   # Backend Node.js
   backend:
@@ -42,7 +51,6 @@ services:
       PORT: 3001
       MONGODB_URI: mongodb://admin:password123@mongodb:27017/chatdb?authSource=admin
       REDIS_URL: redis://redis:6379
-      JWT_SECRET: your-super-secret-jwt-key-change-in-production
       CORS_ORIGIN: http://localhost:3000
     ports:
       - "3001:3001"
@@ -50,11 +58,16 @@ services:
       - mongodb
       - redis
     volumes:
-      - ./back-end:/app
+      - ./back-end:/app:Z
       - /app/node_modules
     networks:
       - chat-network
-    command: yarn dev
+    command: yarn start
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   # Frontend React
   frontend:
@@ -64,35 +77,22 @@ services:
     container_name: chat-frontend
     restart: unless-stopped
     environment:
-      REACT_APP_API_URL: http://localhost:3001
       REACT_APP_SOCKET_URL: http://localhost:3001
     ports:
       - "3000:3000"
     depends_on:
       - backend
     volumes:
-      - ./front-end:/app
+      - ./front-end:/app:Z
       - /app/node_modules
     networks:
       - chat-network
     command: yarn start
-
-  # Nginx para proxy reverso
-  nginx:
-    image: nginx:alpine
-    container_name: chat-nginx
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/ssl:/etc/nginx/ssl:ro
-    depends_on:
-      - frontend
-      - backend
-    networks:
-      - chat-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 volumes:
   mongodb_data:

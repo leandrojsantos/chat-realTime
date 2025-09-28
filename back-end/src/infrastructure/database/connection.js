@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { logger } = require('./logging/logger');
+const { logger } = require('../logging/logger');
 
 class DatabaseConnection {
   constructor() {
@@ -11,13 +11,10 @@ class DatabaseConnection {
       const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/chatdb';
       
       const options = {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
         maxPoolSize: 10,
         serverSelectionTimeoutMS: 5000,
         socketTimeoutMS: 45000,
         bufferCommands: false,
-        bufferMaxEntries: 0,
       };
 
       await mongoose.connect(mongoUri, options);

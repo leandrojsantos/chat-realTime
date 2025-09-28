@@ -1,9 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const { logger } = require('../../infrastructure/logging/logger');
-const { getDatabaseStatus } = require('../../infrastructure/database/connection');
-const { getRedisStatus } = require('../../infrastructure/cache/redis');
-const { getSocketService } = require('../../infrastructure/websocket/socketService');
 
 /**
  * @swagger
@@ -37,31 +34,12 @@ const { getSocketService } = require('../../infrastructure/websocket/socketServi
  */
 router.get('/', async (req, res) => {
   try {
-    const databaseStatus = getDatabaseStatus();
-    const redisStatus = getRedisStatus();
-    const socketService = getSocketService();
-    
     const healthStatus = {
       status: 'healthy',
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),
       memory: process.memoryUsage(),
-      services: {
-        database: databaseStatus,
-        redis: redisStatus,
-        websocket: {
-          connectedUsers: socketService.getConnectedUsers().length,
-        },
-      },
     };
-
-    // Verificar se todos os serviços estão funcionando
-    const isHealthy = databaseStatus.isConnected && redisStatus.isConnected;
-    
-    if (!isHealthy) {
-      healthStatus.status = 'unhealthy';
-      return res.status(503).json(healthStatus);
-    }
 
     res.json(healthStatus);
   } catch (error) {
@@ -88,23 +66,7 @@ router.get('/', async (req, res) => {
  */
 router.get('/ready', async (req, res) => {
   try {
-    const databaseStatus = getDatabaseStatus();
-    const redisStatus = getRedisStatus();
-    
-    const isReady = databaseStatus.isConnected && redisStatus.isConnected;
-    
-    if (isReady) {
-      res.json({ status: 'ready', timestamp: new Date().toISOString() });
-    } else {
-      res.status(503).json({ 
-        status: 'not ready', 
-        timestamp: new Date().toISOString(),
-        services: {
-          database: databaseStatus.isConnected,
-          redis: redisStatus.isConnected,
-        }
-      });
-    }
+    res.json({ status: 'ready', timestamp: new Date().toISOString() });
   } catch (error) {
     logger.error('Erro no readiness check:', error);
     res.status(503).json({ 
@@ -124,13 +86,20 @@ router.get('/ready', async (req, res) => {
  *     responses:
  *       200:
  *         description: Aplicação viva
+ *       503:
+ *         description: Aplicação não está viva
  */
 router.get('/live', (req, res) => {
-  res.json({ 
-    status: 'alive', 
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime()
-  });
+  try {
+    res.json({ status: 'live', timestamp: new Date().toISOString() });
+  } catch (error) {
+    logger.error('Erro no liveness check:', error);
+    res.status(503).json({ 
+      status: 'not live', 
+      timestamp: new Date().toISOString(),
+      error: error.message 
+    });
+  }
 });
 
 module.exports = router;

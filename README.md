@@ -1,350 +1,181 @@
-# 🚀 Chat em Tempo Real - 2025 Edition
+# Chat RealTime - Clean Architecture
 
-<div align="center">
+[![Node.js](https://img.shields.io/badge/Node.js-20-green)](https://nodejs.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-7.0-green)](https://mongodb.com/)
+[![Redis](https://img.shields.io/badge/Redis-7.2-red)](https://redis.io/)
+[![Podman](https://img.shields.io/badge/Podman-✅-blue)](https://podman.io/)
 
-![Node.js](https://img.shields.io/badge/Node.js-20-green)
-![MongoDB](https://img.shields.io/badge/MongoDB-7.0-green)
-![Redis](https://img.shields.io/badge/Redis-7.2-red)
-![Docker](https://img.shields.io/badge/Docker-✅-blue)
-![Tests](https://img.shields.io/badge/Tests-✅-yellow)
-![CI/CD](https://img.shields.io/badge/CI/CD-✅-purple)
-
-**Sistema de chat em tempo real desenvolvido com as melhores práticas de desenvolvimento para 2025**
-
-[📖 Documentação da API](./docs/API.md) • [🐳 Docker](./docs/DOCKER.md) • [🧪 Testes](./docs/TESTS.md) • [🔒 Segurança](./docs/SECURITY.md)
-
-</div>
-
-## 📋 Índice
-
-- [Sobre o Projeto](#-sobre-o-projeto)
-- [Arquitetura](#-arquitetura)
-- [Stack Tecnológica](#-stack-tecnológica)
-- [Funcionalidades](#-funcionalidades)
-- [Pré-requisitos](#-pré-requisitos)
-- [Instalação e Execução](#-instalação-e-execução)
-- [Desenvolvimento](#-desenvolvimento)
-- [Testes](#-testes)
-- [Deploy](#-deploy)
-- [Monitoramento](#-monitoramento)
-- [Contribuição](#-contribuição)
-- [Licença](#-licença)
-
-## 🎯 Sobre o Projeto
-
-Este projeto representa o desenvolvimento de software moderno para 2025, implementando um sistema de chat em tempo real com:
-
-- ✅ **Clean Architecture/DDD** - Separação clara de responsabilidades
-- ✅ **Containerização** - Podman + Podman Compose para desenvolvimento
-- ✅ **Testes Automatizados** - Unit, Integration e E2E
-- ✅ **CI/CD Pipeline** - GitHub Actions com múltiplos workflows
-- ✅ **Documentação API** - Swagger/OpenAPI 3.0 + ReDoc
-- ✅ **Monitoramento** - Logging estruturado e health checks
-- ✅ **Segurança** - JWT, rate limiting, security scanning
-- ✅ **Convenções** - Conventional Commits e branch naming
+Sistema de chat em tempo real implementado com **Clean Architecture** e **Domain-Driven Design**.
 
 ## 🏗️ Arquitetura
 
-O projeto segue os princípios de **Clean Architecture** e **Domain-Driven Design (DDD)**:
-
 ```
-src/
+back-end/src/
 ├── domain/                 # Camada de Domínio
 │   ├── entities/          # Entidades de negócio
-│   ├── repositories/     # Interfaces dos repositórios
-│   └── useCases/         # Casos de uso
+│   ├── repositories/      # Interfaces dos repositórios
+│   └── useCases/          # Casos de uso
 ├── infrastructure/        # Camada de Infraestrutura
-│   ├── database/        # Conexão com MongoDB
-│   ├── cache/           # Redis para cache
-│   ├── logging/         # Sistema de logs
-│   ├── websocket/       # Socket.IO
-│   └── repositories/    # Implementações dos repositórios
-├── presentation/         # Camada de Apresentação
-│   └── routes/          # Controllers e rotas
-├── middleware/          # Middlewares customizados
-└── app.js              # Configuração da aplicação
+│   ├── database/         # Conexão MongoDB
+│   ├── cache/            # Redis
+│   ├── logging/          # Winston
+│   ├── websocket/        # Socket.IO
+│   └── repositories/     # Implementações
+├── presentation/          # Camada de Apresentação
+│   └── routes/           # Controllers
+├── middleware/           # Middlewares
+└── app.js               # Configuração
 ```
 
-### Princípios Aplicados
-
-- **Separation of Concerns**: Cada camada tem responsabilidade específica
-- **Dependency Inversion**: Dependências apontam para abstrações
-- **Single Responsibility**: Cada classe tem uma única responsabilidade
-- **Open/Closed Principle**: Aberto para extensão, fechado para modificação
-
-## 🛠️ Stack Tecnológica
+## 🛠️ Stack
 
 ### Backend
-- **Node.js 20** - Runtime JavaScript LTS
-- **Express.js 4.18** - Framework web
-- **Socket.IO 4.7** - Comunicação em tempo real
-- **MongoDB 7.0** - Banco de dados NoSQL
-- **Redis 7.2** - Cache e sessões
-- **JWT** - Autenticação stateless
-- **Winston** - Sistema de logging
-- **Jest** - Framework de testes
+- **Node.js 20** + **Express.js**
+- **Socket.IO** para tempo real
+- **MongoDB** + **Redis**
+- **Winston** para logs
+- **Swagger** para documentação
+
+### Frontend
+- **React 18** + **Socket.IO Client**
+- **React Scripts** para build
 
 ### Infraestrutura
-- **Podman** - Containerização
-- **Podman Compose** - Orquestração de containers
-- **Nginx** - Proxy reverso
-- **GitHub Actions** - CI/CD
+- **Podman** + **Podman Compose**
+- **Multi-stage Dockerfiles**
 
-### Qualidade e Segurança
-- **ESLint** - Linting de código
-- **Prettier** - Formatação de código
-- **Husky** - Git hooks
-- **Commitlint** - Validação de commits
-- **Snyk** - Security scanning
-- **SonarCloud** - Análise de qualidade
+## 🚀 Quick Start
 
-## ✨ Funcionalidades
-
-### Core Features
-- 🏠 **Múltiplas Salas** - Criação e gerenciamento de salas de chat
-- 👥 **Gerenciamento de Usuários** - CRUD completo de usuários
-- 💬 **Mensagens em Tempo Real** - WebSocket para comunicação instantânea
-- ✏️ **Edição de Mensagens** - Editar mensagens enviadas
-- 🗑️ **Exclusão de Mensagens** - Deletar mensagens
-- 📝 **Histórico** - Buscar mensagens antigas
-
-### Features Avançadas
-- 🔐 **Autenticação JWT** - Sistema de autenticação seguro
-- ⚡ **Rate Limiting** - Proteção contra spam
-- 📊 **Health Checks** - Monitoramento da aplicação
-- 📈 **Logging Estruturado** - Logs detalhados para auditoria
-- 🔍 **Documentação Interativa** - Swagger UI e ReDoc
-- 🧪 **Cobertura de Testes** - Testes unitários, integração e E2E
-
-## 📋 Pré-requisitos
-
-### Desenvolvimento Local
-- **Node.js 20+** - [Download](https://nodejs.org/)
-- **Yarn 4+** - [Installation Guide](https://yarnpkg.com/getting-started/install)
-- **Podman** - [Installation Guide](https://podman.io/getting-started/installation)
-- **Git** - [Download](https://git-scm.com/)
-
-### Produção
-- **Podman** ou **Docker**
-- **MongoDB 7.0+**
-- **Redis 7.2+**
-- **Nginx** (opcional)
-
-## 🚀 Instalação e Execução
-
-### 1. Clone o Repositório
+### 1. Clone e Execute
 ```bash
-git clone https://github.com/seu-usuario/chat-realTime.git
+git clone <repo>
 cd chat-realTime
-```
-
-### 2. Configuração do Ambiente
-```bash
-# Copiar arquivo de configuração
-cp back-end/.env.example back-end/.env
-
-# Editar variáveis de ambiente
-nano back-end/.env
-```
-
-### 3. Execução com Podman Compose (Recomendado)
-```bash
-# Iniciar todos os serviços
 podman-compose up -d
-
-# Verificar status
-podman-compose ps
-
-# Ver logs
-podman-compose logs -f
 ```
 
-### 4. Execução Manual
-```bash
-# Backend
-cd back-end
-yarn install
-yarn dev
-
-# Frontend (em outro terminal)
-cd front-end
-yarn install
-yarn start
-```
-
-### 5. Acessar a Aplicação
+### 2. Acesse
 - **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:3001
-- **Documentação Swagger**: http://localhost:3001/api-docs
-- **Documentação ReDoc**: http://localhost:3001/redoc
-- **Health Check**: http://localhost:3001/health
+- **Backend**: http://localhost:3001
+- **API Docs**: http://localhost:3001/api-docs
 
-## 💻 Desenvolvimento
+## 📋 Comandos
 
-### Estrutura de Branches
-- `main` - Branch de produção
-- `develop` - Branch de desenvolvimento
-- `feature/*` - Novas funcionalidades
-- `bugfix/*` - Correções de bugs
-- `hotfix/*` - Correções urgentes
-
-### Convenção de Commits
-Seguimos [Conventional Commits](https://www.conventionalcommits.org/):
-
-```bash
-feat(chat): add message editing functionality
-fix(auth): resolve JWT token validation
-docs(api): update swagger documentation
-```
-
-### Scripts Disponíveis
 ```bash
 # Desenvolvimento
-yarn dev          # Inicia em modo desenvolvimento
-yarn start        # Inicia em modo produção
+podman-compose up -d          # Iniciar
+podman-compose down           # Parar
+podman-compose logs -f        # Logs
+podman-compose ps             # Status
 
-# Testes
-yarn test         # Executa todos os testes
-yarn test:unit    # Testes unitários
-yarn test:integration # Testes de integração
-yarn test:e2e     # Testes end-to-end
-yarn test:coverage # Cobertura de testes
-
-# Qualidade
-yarn lint         # ESLint
-yarn lint:fix     # Corrigir problemas de lint
-yarn format       # Prettier
-yarn security:audit # Auditoria de segurança
-
-# Dependências
-yarn install:clean # Instalação limpa
-yarn upgrade      # Atualizar dependências
-yarn check        # Verificar integridade
+# Build
+podman-compose build          # Rebuild
 ```
+
+## 🔧 Configuração
+
+### Variáveis de Ambiente
+```bash
+# back-end/.env
+NODE_ENV=development
+PORT=3001
+MONGODB_URI=mongodb://admin:password123@mongodb:27017/chatdb?authSource=admin
+REDIS_URL=redis://redis:6379
+CORS_ORIGIN=http://localhost:3000
+```
+
+## 📊 Endpoints
+
+### Health Checks
+- `GET /health` - Status geral
+- `GET /health/ready` - Readiness
+- `GET /health/live` - Liveness
+
+### API
+- `POST /api/users` - Criar usuário
+- `GET /api/users/:id` - Buscar usuário
+- `POST /api/rooms` - Criar sala
+- `GET /api/rooms` - Listar salas
+- `POST /api/chat/messages` - Enviar mensagem
 
 ## 🧪 Testes
 
-### Estrutura de Testes
-```
-tests/
-├── unit/              # Testes unitários
-│   ├── User.test.js
-│   ├── Room.test.js
-│   └── Message.test.js
-├── integration/       # Testes de integração
-│   ├── user.test.js
-│   ├── room.test.js
-│   ├── chat.test.js
-│   └── health.test.js
-└── e2e/              # Testes end-to-end
-    └── chatFlow.test.js
-```
-
-### Executar Testes
 ```bash
-# Todos os testes
+# Backend
+cd back-end
 yarn test
 
-# Testes específicos
-yarn test --testPathPattern=unit
-yarn test --testPathPattern=integration
-yarn test --testPathPattern=e2e
-
-# Com cobertura
-yarn test:coverage
+# Frontend
+cd front-end
+yarn test
 ```
 
-### Cobertura de Testes
-- **Unit Tests**: > 90%
-- **Integration Tests**: > 80%
-- **E2E Tests**: Cenários críticos
+## 📦 Estrutura do Projeto
+
+```
+chat-realTime/
+├── back-end/              # API Node.js
+│   ├── src/
+│   ├── Dockerfile
+│   └── package.json
+├── front-end/             # React App
+│   ├── src/
+│   ├── Dockerfile
+│   └── package.json
+├── docker-compose.yml     # Orquestração
+└── README.md
+```
+
+## 🔍 Monitoramento
+
+### Logs Estruturados
+```json
+{
+  "level": "info",
+  "message": "Usuário conectado",
+  "timestamp": "2025-01-01T00:00:00.000Z",
+  "service": "chat-backend"
+}
+```
+
+### Health Checks
+```bash
+curl http://localhost:3001/health
+```
 
 ## 🚀 Deploy
 
-### Deploy com Podman Compose
+### Produção
 ```bash
-# Produção
+# Build e deploy
 podman-compose -f docker-compose.prod.yml up -d
 
-# Verificar saúde
+# Verificar
 curl http://localhost/health
 ```
 
-### Deploy Manual
-```bash
-# Build das imagens
-podman build -t chat-backend ./back-end
-podman build -t chat-frontend ./front-end
+## 📝 Desenvolvimento
 
-# Executar containers
-podman run -d --name chat-backend -p 3001:3001 chat-backend
-podman run -d --name chat-frontend -p 3000:3000 chat-frontend
+### Convenções
+- **Commits**: Conventional Commits
+- **Branches**: `feature/*`, `bugfix/*`, `hotfix/*`
+- **Code Review**: Obrigatório
+
+### Scripts
+```bash
+# Backend
+yarn start                 # Produção
+yarn dev                   # Desenvolvimento
+
+# Frontend
+yarn start                 # Desenvolvimento
+yarn build                 # Build produção
 ```
 
-### Variáveis de Ambiente (Produção)
-```bash
-NODE_ENV=production
-MONGODB_URI=mongodb://user:pass@mongodb:27017/chatdb
-REDIS_URL=redis://redis:6379
-JWT_SECRET=your-super-secret-key
-CORS_ORIGIN=https://yourdomain.com
-```
+## 🔒 Segurança
 
-## 📊 Monitoramento
+- **Rate Limiting**: 100 req/15min
+- **CORS**: Configurado
+- **Helmet**: Headers de segurança
+- **Input Validation**: Joi
 
-### Health Checks
-- **Liveness**: `/health/live` - Verifica se a aplicação está rodando
-- **Readiness**: `/health/ready` - Verifica se está pronto para receber tráfego
-- **Health**: `/health` - Status completo da aplicação
-
-### Logging
-- **Estruturado**: Logs em formato JSON
-- **Níveis**: error, warn, info, debug
-- **Rotação**: Logs são rotacionados automaticamente
-- **Auditoria**: Logs de ações importantes
-
-### Métricas
-- **Performance**: Tempo de resposta das APIs
-- **Uso de Memória**: Monitoramento de recursos
-- **Conexões**: Usuários conectados via WebSocket
-- **Erros**: Taxa de erro das requisições
-
-## 🤝 Contribuição
-
-### Como Contribuir
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'feat: add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
-### Checklist de Contribuição
-- [ ] Código testado
-- [ ] Documentação atualizada
-- [ ] Testes passando
-- [ ] Sem breaking changes
-- [ ] Seguindo convenções de commit
-
-### Code Review
-- Todos os PRs passam por revisão
-- Pelo menos 1 aprovação necessária
-- CI/CD deve passar
-- Cobertura de testes mantida
-
-## 📄 Licença
-
-Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
-
-## 📞 Suporte
-
-- **Documentação**: [docs/](./docs/)
-- **Issues**: [GitHub Issues](https://github.com/seu-usuario/chat-realTime/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/seu-usuario/chat-realTime/discussions)
-
-## 🏆 Reconhecimentos
-
-- [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
-- [Domain-Driven Design](https://martinfowler.com/bliki/DomainDrivenDesign.html)
-- [Conventional Commits](https://www.conventionalcommits.org/)
-- [Node.js Best Practices](https://github.com/goldbergyoni/nodebestpractices)
-
+**Desenvolvido com Clean Architecture e DDD**

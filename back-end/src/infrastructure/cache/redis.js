@@ -1,5 +1,5 @@
 const redis = require('redis');
-const { logger } = require('./logging/logger');
+const { logger } = require('../logging/logger');
 
 class RedisConnection {
   constructor() {

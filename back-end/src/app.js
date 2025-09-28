@@ -4,8 +4,8 @@ const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
-const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
 const { errorHandler } = require('./middleware/errorHandler');
 const { logger } = require('./infrastructure/logging/logger');
@@ -19,33 +19,13 @@ const userRoutes = require('./presentation/routes/userRoutes');
 const roomRoutes = require('./presentation/routes/roomRoutes');
 const healthRoutes = require('./presentation/routes/healthRoutes');
 
-// Swagger configuration
-const swaggerOptions = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'Chat API',
-      version: '2.0.0',
-      description: 'API para sistema de chat em tempo real',
-    },
-    servers: [
-      {
-        url: process.env.API_URL || 'http://localhost:3001',
-        description: 'Servidor de desenvolvimento',
-      },
-    ],
-  },
-  apis: ['./src/presentation/routes/*.js'],
-};
-
-const swaggerSpec = swaggerJsdoc(swaggerOptions);
-
 class App {
   constructor() {
     this.app = express();
     this.port = process.env.PORT || 3001;
     this.server = require('http').createServer(this.app);
-    
+
+    this.initializeSwagger();
     this.initializeMiddlewares();
     this.initializeRoutes();
     this.initializeErrorHandling();
@@ -53,10 +33,33 @@ class App {
     this.initializeSocket();
   }
 
+  initializeSwagger() {
+    const swaggerOptions = {
+      definition: {
+        openapi: '3.0.0',
+        info: {
+          title: 'Chat API',
+          version: '2.0.0',
+          description: 'API para sistema de chat em tempo real',
+        },
+        servers: [
+          {
+            url: `http://localhost:${this.port}`,
+            description: 'Servidor de desenvolvimento',
+          },
+        ],
+      },
+      apis: ['./src/presentation/routes/*.js', './src/domain/entities/*.js'],
+    };
+
+    const swaggerSpec = swaggerJsdoc(swaggerOptions);
+    this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  }
+
   initializeMiddlewares() {
     // Security middleware
     this.app.use(helmet());
-    
+
     // CORS configuration
     this.app.use(cors({
       origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
@@ -68,7 +71,7 @@ class App {
 
     // Logging
     this.app.use(morgan('combined', {
-      stream: { write: message => logger.info(message.trim()) }
+      stream: { write: (message) => logger.info(message.trim()) },
     }));
 
     // Rate limiting
@@ -79,46 +82,18 @@ class App {
     });
     this.app.use('/api/', limiter);
 
+    // Static files (favicon)
+    this.app.use(express.static('public'));
+
     // Body parsing
     this.app.use(express.json({ limit: '10mb' }));
     this.app.use(express.urlencoded({ extended: true }));
-
-    // Swagger documentation
-    this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs, swaggerUiOptions));
-    
-    // Redoc documentation
-    this.app.use('/redoc', (req, res) => {
-      res.send(`
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <title>Chat API - ReDoc</title>
-            <meta charset="utf-8"/>
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:300,400,700" rel="stylesheet">
-            <style>
-              body { margin: 0; padding: 0; }
-            </style>
-          </head>
-          <body>
-            <redoc spec-url='/api-docs/swagger.json'></redoc>
-            <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
-          </body>
-        </html>
-      `);
-    });
-    
-    // JSON spec endpoint
-    this.app.get('/api-docs/swagger.json', (req, res) => {
-      res.setHeader('Content-Type', 'application/json');
-      res.send(swaggerSpecs);
-    });
   }
 
   initializeRoutes() {
     // Health check
     this.app.use('/health', healthRoutes);
-    
+
     // API routes
     this.app.use('/api/users', userRoutes);
     this.app.use('/api/rooms', roomRoutes);
@@ -128,9 +103,14 @@ class App {
     this.app.get('/', (req, res) => {
       res.json({
         message: 'Chat API v2.0.0',
+        health: '/health',
         documentation: '/api-docs',
-        health: '/health'
       });
+    });
+
+    // Redirect /docs to /api-docs
+    this.app.get('/docs', (req, res) => {
+      res.redirect('/api-docs');
     });
   }
 
@@ -157,7 +137,6 @@ class App {
     try {
       this.server.listen(this.port, () => {
         logger.info(`Servidor rodando na porta ${this.port}`);
-        logger.info(`Documentação disponível em http://localhost:${this.port}/api-docs`);
       });
     } catch (error) {
       logger.error('Erro ao iniciar servidor:', error);
