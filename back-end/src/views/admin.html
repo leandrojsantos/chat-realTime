@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Admin Dashboard 2025</title>
+    <style>
+        /* Modern 2025 Admin Dashboard Styles */
+        :root {
+            --primary-50: #f0f9ff;
+            --primary-100: #e0f2fe;
+            --primary-500: #0ea5e9;
+            --primary-600: #0284c7;
+            --primary-700: #0369a1;
+            --primary-900: #0c4a6e;
+            
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            
+            --success-500: #10b981;
+            --error-500: #ef4444;
+            --warning-500: #f59e0b;
+            
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        .admin-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
+            padding: var(--space-xl);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .sidebar-header {
+            margin-bottom: var(--space-2xl);
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: var(--space-sm);
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: var(--radius-lg);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--primary-600);
+        }
+
+        .sidebar-nav a.active {
+            background: rgba(14, 165, 233, 0.2);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: var(--space-xl);
+            overflow-y: auto;
+        }
+
+        .content-header {
+            margin-bottom: var(--space-2xl);
+        }
+
+        .content-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: var(--space-sm);
+        }
+
+        .content-header p {
+            color: var(--gray-600);
+            font-size: 1.1rem;
+        }
+
+        /* Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-xl);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-xl);
+            box-shadow: var(--glass-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-lg);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .card-icon.primary {
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--primary-600);
+        }
+
+        .card-icon.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-500);
+        }
+
+        .card-icon.warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-500);
+        }
+
+        .card-icon.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error-500);
+        }
+
+        .card-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: var(--space-sm);
+        }
+
+        .card-description {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        /* Tables */
+        .table-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-xl);
+            box-shadow: var(--glass-shadow);
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-lg);
+        }
+
+        .table-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: var(--space-md);
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.5);
+            font-weight: 600;
+            color: var(--gray-700);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            color: var(--gray-900);
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-md);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-badge.online {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-500);
+        }
+
+        .status-badge.offline {
+            background: rgba(156, 163, 175, 0.1);
+            color: var(--gray-500);
+        }
+
+        .status-badge.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error-500);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .admin-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-500);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Hidden content */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1>🚀 Chat Admin</h1>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="#" class="nav-link active" data-section="dashboard">📊 Dashboard</a></li>
+                <li><a href="#" class="nav-link" data-section="users">👥 Usuários</a></li>
+                <li><a href="#" class="nav-link" data-section="rooms">🏠 Salas</a></li>
+                <li><a href="#" class="nav-link" data-section="messages">💬 Mensagens</a></li>
+                <li><a href="#" class="nav-link" data-section="analytics">📈 Analytics</a></li>
+                <li><a href="#" class="nav-link" data-section="settings">⚙️ Configurações</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active">
+                <div class="content-header">
+                    <h2>Dashboard</h2>
+                    <p>Visão geral do sistema de chat em tempo real</p>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Usuários Online</h3>
+                            <div class="card-icon primary">👥</div>
+                        </div>
+                        <div class="card-value" id="online-users">0</div>
+                        <p class="card-description">Usuários conectados no momento</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Salas Ativas</h3>
+                            <div class="card-icon success">🏠</div>
+                        </div>
+                        <div class="card-value" id="active-rooms">0</div>
+                        <p class="card-description">Salas com atividade recente</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Mensagens Hoje</h3>
+                            <div class="card-icon warning">💬</div>
+                        </div>
+                        <div class="card-value" id="messages-today">0</div>
+                        <p class="card-description">Mensagens enviadas hoje</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Status do Sistema</h3>
+                            <div class="card-icon success">✅</div>
+                        </div>
+                        <div class="card-value" id="system-status">Online</div>
+                        <p class="card-description">Todos os serviços funcionando</p>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Atividade Recente</h3>
+                        <button class="btn btn-secondary" onclick="refreshActivity()">
+                            <span class="loading" id="refresh-loading" style="display: none;"></span>
+                            🔄 Atualizar
+                        </button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Usuário</th>
+                                <th>Ação</th>
+                                <th>Sala</th>
+                                <th>Timestamp</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activity-table">
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: var(--gray-500);">
+                                    Carregando atividades...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Users Section -->
+            <section id="users" class="content-section">
+                <div class="content-header">
+                    <h2>Usuários</h2>
+                    <p>Gerenciar usuários do sistema</p>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Lista de Usuários</h3>
+                        <button class="btn btn-primary" onclick="exportUsers()">📥 Exportar</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Última Atividade</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table">
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: var(--gray-500);">
+                                    Carregando usuários...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Rooms Section -->
+            <section id="rooms" class="content-section">
+                <div class="content-header">
+                    <h2>Salas</h2>
+                    <p>Gerenciar salas de chat</p>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Salas Ativas</h3>
+                        <button class="btn btn-primary" onclick="createRoom()">➕ Nova Sala</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome da Sala</th>
+                                <th>Usuários</th>
+                                <th>Mensagens</th>
+                                <th>Criada em</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rooms-table">
+                            <tr>
+                                <td colspan="6" style="text-align: center; color: var(--gray-500);">
+                                    Carregando salas...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Messages Section -->
+            <section id="messages" class="content-section">
+                <div class="content-header">
+                    <h2>Mensagens</h2>
+                    <p>Monitorar mensagens do sistema</p>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Mensagens Recentes</h3>
+                        <div>
+                            <button class="btn btn-secondary" onclick="filterMessages('all')">Todas</button>
+                            <button class="btn btn-secondary" onclick="filterMessages('today')">Hoje</button>
+                            <button class="btn btn-secondary" onclick="filterMessages('hour')">Última Hora</button>
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Usuário</th>
+                                <th>Sala</th>
+                                <th>Mensagem</th>
+                                <th>Timestamp</th>
+                                <th>Tipo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="messages-table">
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: var(--gray-500);">
+                                    Carregando mensagens...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Analytics Section -->
+            <section id="analytics" class="content-section">
+                <div class="content-header">
+                    <h2>Analytics</h2>
+                    <p>Estatísticas e métricas do sistema</p>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Pico de Usuários</h3>
+                            <div class="card-icon primary">📈</div>
+                        </div>
+                        <div class="card-value" id="peak-users">0</div>
+                        <p class="card-description">Maior número de usuários simultâneos</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Mensagens por Hora</h3>
+                            <div class="card-icon success">⏰</div>
+                        </div>
+                        <div class="card-value" id="messages-per-hour">0</div>
+                        <p class="card-description">Média de mensagens por hora</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Tempo de Resposta</h3>
+                            <div class="card-icon warning">⚡</div>
+                        </div>
+                        <div class="card-value" id="response-time">0ms</div>
+                        <p class="card-description">Tempo médio de resposta do servidor</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Uptime</h3>
+                            <div class="card-icon success">🕐</div>
+                        </div>
+                        <div class="card-value" id="uptime">99.9%</div>
+                        <p class="card-description">Disponibilidade do sistema</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings" class="content-section">
+                <div class="content-header">
+                    <h2>Configurações</h2>
+                    <p>Configurar o sistema de chat</p>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Configurações do Sistema</h3>
+                        <button class="btn btn-primary" onclick="saveSettings()">💾 Salvar</button>
+                    </div>
+                    <div style="padding: var(--space-lg);">
+                        <div style="margin-bottom: var(--space-lg);">
+                            <label style="display: block; margin-bottom: var(--space-sm); font-weight: 600; color: var(--gray-700);">
+                                Limite de Mensagens por Sala
+                            </label>
+                            <input type="number" id="max-messages" value="1000" 
+                                   style="width: 200px; padding: var(--space-sm); border: 1px solid var(--gray-300); border-radius: var(--radius-md);">
+                        </div>
+                        
+                        <div style="margin-bottom: var(--space-lg);">
+                            <label style="display: block; margin-bottom: var(--space-sm); font-weight: 600; color: var(--gray-700);">
+                                Timeout de Inatividade (minutos)
+                            </label>
+                            <input type="number" id="inactivity-timeout" value="30" 
+                                   style="width: 200px; padding: var(--space-sm); border: 1px solid var(--gray-300); border-radius: var(--radius-md);">
+                        </div>
+                        
+                        <div style="margin-bottom: var(--space-lg);">
+                            <label style="display: block; margin-bottom: var(--space-sm); font-weight: 600; color: var(--gray-700);">
+                                Modo de Manutenção
+                            </label>
+                            <input type="checkbox" id="maintenance-mode" 
+                                   style="margin-right: var(--space-sm);">
+                            <span>Ativar modo de manutenção</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remove active class from all links and sections
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                
+                // Add active class to clicked link
+                link.classList.add('active');
+                
+                // Show corresponding section
+                const sectionId = link.dataset.section;
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+
+        // Mock data and functions
+        function updateDashboard() {
+            // Simulate real-time data updates
+            document.getElementById('online-users').textContent = Math.floor(Math.random() * 50) + 10;
+            document.getElementById('active-rooms').textContent = Math.floor(Math.random() * 20) + 5;
+            document.getElementById('messages-today').textContent = Math.floor(Math.random() * 1000) + 500;
+        }
+
+        function refreshActivity() {
+            const loading = document.getElementById('refresh-loading');
+            loading.style.display = 'inline-block';
+            
+            setTimeout(() => {
+                loading.style.display = 'none';
+                updateDashboard();
+                
+                // Update activity table
+                const table = document.getElementById('activity-table');
+                table.innerHTML = `
+                    <tr>
+                        <td>João Silva</td>
+                        <td>Entrou na sala</td>
+                        <td>Geral</td>
+                        <td>${new Date().toLocaleString('pt-BR')}</td>
+                        <td><span class="status-badge online">Online</span></td>
+                    </tr>
+                    <tr>
+                        <td>Maria Santos</td>
+                        <td>Enviou mensagem</td>
+                        <td>Desenvolvimento</td>
+                        <td>${new Date(Date.now() - 300000).toLocaleString('pt-BR')}</td>
+                        <td><span class="status-badge online">Online</span></td>
+                    </tr>
+                    <tr>
+                        <td>Pedro Costa</td>
+                        <td>Saiu da sala</td>
+                        <td>Suporte</td>
+                        <td>${new Date(Date.now() - 600000).toLocaleString('pt-BR')}</td>
+                        <td><span class="status-badge offline">Offline</span></td>
+                    </tr>
+                `;
+            }, 1000);
+        }
+
+        function exportUsers() {
+            alert('Funcionalidade de exportação será implementada');
+        }
+
+        function createRoom() {
+            const roomName = prompt('Nome da nova sala:');
+            if (roomName) {
+                alert(`Sala "${roomName}" criada com sucesso!`);
+            }
+        }
+
+        function filterMessages(filter) {
+            alert(`Filtrando mensagens: ${filter}`);
+        }
+
+        function saveSettings() {
+            alert('Configurações salvas com sucesso!');
+        }
+
+        // Initialize dashboard
+        updateDashboard();
+        refreshActivity();
+
+        // Update data every 30 seconds
+        setInterval(updateDashboard, 30000);
+    </script>
+</body>
+</html>

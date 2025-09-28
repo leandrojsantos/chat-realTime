@@ -1,9 +1,8 @@
 version: '3.8'
 
 services:
-  # MongoDB Database
   mongodb:
-    image: mongo:7.0
+    image: docker.io/library/mongo:7.0
     container_name: chat-mongodb
     restart: unless-stopped
     environment:
@@ -16,15 +15,9 @@ services:
       - mongodb_data:/data/db
     networks:
       - chat-network
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
 
-  # Redis Cache
   redis:
-    image: redis:7.2-alpine
+    image: docker.io/library/redis:7.2-alpine
     container_name: chat-redis
     restart: unless-stopped
     ports:
@@ -33,13 +26,7 @@ services:
       - redis_data:/data
     networks:
       - chat-network
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
 
-  # Backend Node.js
   backend:
     build:
       context: ./back-end
@@ -57,19 +44,9 @@ services:
     depends_on:
       - mongodb
       - redis
-    volumes:
-      - ./back-end:/app:Z
-      - /app/node_modules
     networks:
       - chat-network
-    command: yarn start
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
 
-  # Frontend React
   frontend:
     build:
       context: ./front-end
@@ -82,17 +59,8 @@ services:
       - "3000:3000"
     depends_on:
       - backend
-    volumes:
-      - ./front-end:/app:Z
-      - /app/node_modules
     networks:
       - chat-network
-    command: yarn start
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
 
 volumes:
   mongodb_data:

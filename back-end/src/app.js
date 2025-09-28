@@ -6,18 +6,25 @@ const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const { Server } = require('socket.io');
+const mongoose = require('mongoose');
+const redis = require('redis');
+const winston = require('winston');
+const path = require('path');
 
-const { errorHandler } = require('./middleware/errorHandler');
-const { logger } = require('./infrastructure/logging/logger');
-const { connectDatabase } = require('./infrastructure/database/connection');
-const { connectRedis } = require('./infrastructure/cache/redis');
-const { initializeSocket } = require('./infrastructure/websocket/socketService');
-
-// Import routes
-const chatRoutes = require('./presentation/routes/chatRoutes');
-const userRoutes = require('./presentation/routes/userRoutes');
-const roomRoutes = require('./presentation/routes/roomRoutes');
-const healthRoutes = require('./presentation/routes/healthRoutes');
+// Logger
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  transports: [
+    new winston.transports.Console({
+      format: winston.format.simple()
+    })
+  ]
+});
 
 class App {
   constructor() {
@@ -28,7 +35,6 @@ class App {
     this.initializeSwagger();
     this.initializeMiddlewares();
     this.initializeRoutes();
-    this.initializeErrorHandling();
     this.initializeDatabase();
     this.initializeSocket();
   }
@@ -49,7 +55,7 @@ class App {
           },
         ],
       },
-      apis: ['./src/presentation/routes/*.js', './src/domain/entities/*.js'],
+      apis: ['./src/routes/*.js'],
     };
 
     const swaggerSpec = swaggerJsdoc(swaggerOptions);
@@ -82,7 +88,7 @@ class App {
     });
     this.app.use('/api/', limiter);
 
-    // Static files (favicon)
+    // Static files
     this.app.use(express.static('public'));
 
     // Body parsing
@@ -92,12 +98,24 @@ class App {
 
   initializeRoutes() {
     // Health check
-    this.app.use('/health', healthRoutes);
+    this.app.get('/health', (req, res) => {
+      res.json({
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        memory: process.memoryUsage(),
+      });
+    });
+
+    // Admin dashboard
+    this.app.get('/admin', (req, res) => {
+      res.sendFile(path.join(__dirname, '../views/admin.html'));
+    });
 
     // API routes
-    this.app.use('/api/users', userRoutes);
-    this.app.use('/api/rooms', roomRoutes);
-    this.app.use('/api/chat', chatRoutes);
+    this.app.use('/api/users', require('./routes/userRoutes'));
+    this.app.use('/api/rooms', require('./routes/roomRoutes'));
+    this.app.use('/api/chat', require('./routes/chatRoutes'));
 
     // Root endpoint
     this.app.get('/', (req, res) => {
@@ -105,6 +123,7 @@ class App {
         message: 'Chat API v2.0.0',
         health: '/health',
         documentation: '/api-docs',
+        admin: '/admin',
       });
     });
 
@@ -114,15 +133,18 @@ class App {
     });
   }
 
-  initializeErrorHandling() {
-    this.app.use(errorHandler);
-  }
-
   async initializeDatabase() {
     try {
-      await connectDatabase();
-      await connectRedis();
-      logger.info('Conexões com banco de dados e cache estabelecidas');
+      // MongoDB
+      const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/chatdb';
+      await mongoose.connect(mongoUri);
+      logger.info('Conectado ao MongoDB');
+
+      // Redis
+      const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
+      this.redisClient = redis.createClient({ url: redisUrl });
+      await this.redisClient.connect();
+      logger.info('Conectado ao Redis');
     } catch (error) {
       logger.error('Erro ao conectar com banco de dados:', error);
       process.exit(1);
@@ -130,7 +152,59 @@ class App {
   }
 
   initializeSocket() {
-    initializeSocket(this.server);
+    this.io = new Server(this.server, {
+      cors: {
+        origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+        methods: ['GET', 'POST'],
+        credentials: true,
+      },
+      transports: ['websocket', 'polling'],
+    });
+
+    this.io.on('connection', (socket) => {
+      logger.info(`Usuário conectado: ${socket.id}`);
+      
+      // Evento: Entrar em sala
+      socket.on('join_room', (data) => {
+        try {
+          const { room } = data;
+          socket.join(room);
+          logger.info(`Usuário ${socket.id} entrou na sala ${room}`);
+        } catch (error) {
+          logger.error('Erro ao entrar na sala:', error);
+          socket.emit('error', { message: 'Erro ao entrar na sala' });
+        }
+      });
+
+      // Evento: Enviar mensagem
+      socket.on('send_message', (data) => {
+        try {
+          const { room, message, author, email, dateBirthDay, time } = data;
+          
+          // Enviar mensagem para todos na sala
+          socket.to(room).emit('receive_message', {
+            room,
+            message,
+            author,
+            email,
+            dateBirthDay,
+            time
+          });
+          
+          logger.info(`Mensagem enviada na sala ${room} por ${author}`);
+        } catch (error) {
+          logger.error('Erro ao enviar mensagem:', error);
+          socket.emit('error', { message: 'Erro ao enviar mensagem' });
+        }
+      });
+
+      // Evento: Desconectar
+      socket.on('disconnect', () => {
+        logger.info(`Usuário desconectado: ${socket.id}`);
+      });
+    });
+
+    logger.info('Socket.IO inicializado');
   }
 
   async start() {
@@ -156,8 +230,11 @@ process.on('SIGINT', () => {
   process.exit(0);
 });
 
-// Start application
-const app = new App();
-app.start();
+// Export the class for testing
+module.exports = App;
 
-module.exports = app;
+// Start application only if this file is run directly
+if (require.main === module) {
+  const app = new App();
+  app.start();
+}

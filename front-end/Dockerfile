@@ -1,23 +1,12 @@
-# Development stage
 FROM node:20-alpine
 
-# Set working directory
 WORKDIR /app
 
-# Install Node.js and npm explicitly
-RUN apk add --no-cache nodejs npm
-
-# Copy package files
-COPY package.json package-lock.json* ./
-
-# Install dependencies
+COPY package.json ./
 RUN npm install
 
-# Copy source code
 COPY . .
 
-# Expose port
 EXPOSE 3000
 
-# Start application
 CMD ["npm", "start"]

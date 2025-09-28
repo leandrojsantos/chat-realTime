@@ -1,62 +1,89 @@
-import "./App.css";
-import io from "socket.io-client";
-import { useState } from "react";
-import Chat from "./components/chatComponent";
-
-const socket = io.connect("http://localhost:3001");
+import React, { useState } from 'react';
+import './App.css';
+import Chat from './components/chatComponent';
 
 function App() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [dateBirthDay, setDateBirthDay] = useState("")
-  const [room, setRoom] = useState("");
   const [showChat, setShowChat] = useState(false);
 
-  const joinRoom = () => {
-    if (email !== "" && room !== "") {
-      socket.emit("join_room", room);
+  const handleStartChat = () => {
+    const username = prompt('Digite seu nome de usuário:');
+    if (username?.trim()) {
       setShowChat(true);
     }
   };
 
+  const handleBackToHome = () => {
+    setShowChat(false);
+  };
+
+  if (!showChat) {
+    return (
+      <div className="App">
+        <main role="main">
+          <div className="joinChatContainer">
+            <h1>💬 Chat RealTime</h1>
+            <p className="subtitle">Aplicação de chat em tempo real com tecnologia moderna</p>
+            
+            <section className="features-preview" aria-label="Funcionalidades da aplicação">
+              <div className="feature-item">
+                <span className="feature-icon" aria-hidden="true">🚀</span>
+                <span>Tecnologia Moderna</span>
+              </div>
+              <div className="feature-item">
+                <span className="feature-icon" aria-hidden="true">🎨</span>
+                <span>Design 2025</span>
+              </div>
+              <div className="feature-item">
+                <span className="feature-icon" aria-hidden="true">⚡</span>
+                <span>Tempo Real</span>
+              </div>
+            </section>
+
+            <button 
+              type="button"
+              className="joinChatButton" 
+              onClick={handleStartChat}
+              aria-label="Iniciar chat em tempo real"
+            >
+              🚀 Iniciar Chat
+            </button>
+
+            <nav className="quick-links" aria-label="Links rápidos">
+              <a 
+                href="http://localhost:3001/admin" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="quick-link"
+                aria-label="Abrir dashboard administrativo em nova aba"
+              >
+                📊 Dashboard Admin
+              </a>
+              <a 
+                href="http://localhost:3001/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="quick-link"
+                aria-label="Abrir API do backend em nova aba"
+              >
+                🔗 API Backend
+              </a>
+            </nav>
+
+            <section className="status-info" aria-label="Status dos serviços">
+              <p>✅ Frontend: http://localhost:3000</p>
+              <p>✅ Backend: http://localhost:3001</p>
+              <p>✅ MongoDB: localhost:27017</p>
+              <p>✅ Redis: localhost:6379</p>
+            </section>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="App">
-      {!showChat ? (
-        <div className="joinChatContainer">
-          <h3>Chat </h3>
-          <input
-            type="text"
-            placeholder="Nome..."
-            onChange={(event) => {
-              setUsername(event.target.value);
-            }}
-          />
-           <input
-            type="text"
-            placeholder="Email..."
-            onChange={(event) => {
-              setEmail(event.target.value);
-            }}
-          />
-          <input
-            type="text"
-            placeholder="Data de nascimento..."
-            onChange={(event) => {
-              setDateBirthDay(event.target.value);
-            }}
-          />
-          <input
-            type="text"
-            placeholder="Nome da sala..."
-            onChange={(event) => {
-              setRoom(event.target.value);
-            }}
-          />
-          <button onClick={joinRoom}>Entre</button>
-        </div>
-      ) : (
-        <Chat socket={socket} username={username} email={email} dateBirthDay={dateBirthDay} room={room} />
-      )}
+      <Chat onBackToHome={handleBackToHome} />
     </div>
   );
 }

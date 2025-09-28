@@ -1,43 +1,366 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#0ea5e9" />
     <meta
       name="description"
-      content="Web site created using create-react-app"
+      content="Chat RealTime - Aplicação de chat em tempo real com tecnologia moderna"
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Chat RealTime - Bem-vindo</title>
+    <style>
+      :root {
+        --primary-500: #0ea5e9;
+        --primary-600: #0284c7;
+        --primary-700: #0369a1;
+        --gray-50: #f8fafc;
+        --gray-100: #f1f5f9;
+        --gray-200: #e2e8f0;
+        --gray-300: #cbd5e1;
+        --gray-400: #94a3b8;
+        --gray-500: #64748b;
+        --gray-600: #475569;
+        --gray-700: #334155;
+        --gray-800: #1e293b;
+        --gray-900: #0f172a;
+        --glass-bg: rgba(255, 255, 255, 0.1);
+        --glass-border: rgba(255, 255, 255, 0.2);
+        --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        --space-xs: 0.25rem;
+        --space-sm: 0.5rem;
+        --space-md: 1rem;
+        --space-lg: 1.5rem;
+        --space-xl: 2rem;
+        --space-2xl: 3rem;
+        --radius-sm: 0.375rem;
+        --radius-md: 0.5rem;
+        --radius-lg: 0.75rem;
+        --radius-xl: 1rem;
+        --radius-2xl: 1.5rem;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      }
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      body::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+          radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+          radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+          radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+        pointer-events: none;
+      }
+
+      .welcome-container {
+        position: relative;
+        z-index: 10;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-2xl);
+        box-shadow: var(--glass-shadow);
+        padding: var(--space-2xl);
+        margin: var(--space-xl);
+        max-width: 800px;
+        width: 90%;
+        text-align: center;
+      }
+
+      .logo {
+        font-size: 3rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: var(--space-lg);
+      }
+
+      .subtitle {
+        font-size: 1.25rem;
+        color: var(--gray-700);
+        margin-bottom: var(--space-2xl);
+        font-weight: 400;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: var(--space-lg);
+        margin-bottom: var(--space-2xl);
+      }
+
+      .feature-card {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: var(--radius-lg);
+        padding: var(--space-lg);
+        box-shadow: var(--shadow-md);
+        transition: all 0.3s ease;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .feature-icon {
+        font-size: 2rem;
+        margin-bottom: var(--space-sm);
+      }
+
+      .feature-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--primary-700);
+        margin-bottom: var(--space-xs);
+      }
+
+      .feature-description {
+        font-size: 0.875rem;
+        color: var(--gray-600);
+        line-height: 1.5;
+      }
+
+      .cta-section {
+        margin-top: var(--space-2xl);
+      }
+
+      .cta-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--gray-800);
+        margin-bottom: var(--space-lg);
+      }
+
+      .cta-buttons {
+        display: flex;
+        gap: var(--space-md);
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .cta-button {
+        background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+        color: white;
+        border: none;
+        border-radius: var(--radius-md);
+        padding: var(--space-md) var(--space-xl);
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-md);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-sm);
+      }
+
+      .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+        background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+      }
+
+      .cta-button.secondary {
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--gray-700);
+        border: 1px solid var(--gray-300);
+      }
+
+      .cta-button.secondary:hover {
+        background: rgba(255, 255, 255, 1);
+        color: var(--gray-800);
+      }
+
+      .status-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-sm);
+        margin-top: var(--space-lg);
+        padding: var(--space-sm) var(--space-md);
+        background: rgba(34, 197, 94, 0.1);
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        border-radius: var(--radius-md);
+        color: #059669;
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        background: #22c55e;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+
+      @media (max-width: 768px) {
+        .welcome-container {
+          padding: var(--space-xl);
+          margin: var(--space-md);
+        }
+
+        .logo {
+          font-size: 2.5rem;
+        }
+
+        .features-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .cta-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .cta-button {
+          width: 100%;
+          max-width: 300px;
+        }
+      }
+    </style>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+    <div class="welcome-container">
+      <h1 class="logo">💬 Chat RealTime</h1>
+      <p class="subtitle">Aplicação de chat em tempo real com tecnologia moderna e design 2025</p>
+      
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <h3 class="feature-title">Tecnologia Moderna</h3>
+          <p class="feature-description">React, Node.js, Socket.IO, MongoDB e Redis para performance máxima</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3 class="feature-title">Design 2025</h3>
+          <p class="feature-description">Interface moderna com glassmorphism, gradientes e animações suaves</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3 class="feature-title">Tempo Real</h3>
+          <p class="feature-description">Mensagens instantâneas, indicadores de digitação e status de conexão</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🔧</div>
+          <h3 class="feature-title">Padrões de Projeto</h3>
+          <p class="feature-description">Strategy Pattern para processamento de mensagens e conexões</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3 class="feature-title">Dashboard Admin</h3>
+          <p class="feature-description">Painel administrativo com métricas em tempo real e gerenciamento</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🧪</div>
+          <h3 class="feature-title">Testes Completos</h3>
+          <p class="feature-description">Testes unitários e e2e com Jest para garantir qualidade</p>
+        </div>
+      </div>
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+      <div class="cta-section">
+        <h2 class="cta-title">Próximos Passos</h2>
+        <div class="cta-buttons">
+          <a href="/chat" class="cta-button">
+            🚀 Iniciar Chat
+          </a>
+          <a href="http://localhost:3001/admin" class="cta-button secondary" target="_blank">
+            📊 Dashboard Admin
+          </a>
+          <a href="http://localhost:3001/" class="cta-button secondary" target="_blank">
+            🔗 API Backend
+          </a>
+        </div>
+        
+        <div class="status-indicator">
+          <div class="status-dot"></div>
+          Sistema online e funcionando
+        </div>
+      </div>
+    </div>
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    <script>
+      // Verificar status dos serviços
+      async function checkServices() {
+        try {
+          const backendResponse = await fetch('http://localhost:3001/');
+          if (backendResponse.ok) {
+            console.log('✅ Backend está funcionando');
+          }
+        } catch (error) {
+          console.log('❌ Backend não está acessível');
+        }
+      }
+
+      // Verificar status quando a página carregar
+      document.addEventListener('DOMContentLoaded', checkServices);
+
+      // Adicionar animação aos cards
+      const cards = document.querySelectorAll('.feature-card');
+      cards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.style.animation = 'fadeInUp 0.6s ease forwards';
+      });
+
+      // CSS para animação
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        .feature-card {
+          opacity: 0;
+        }
+      `;
+      document.head.appendChild(style);
+    </script>
   </body>
 </html>
