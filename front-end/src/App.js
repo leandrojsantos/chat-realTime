@@ -1,26 +1,86 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import Chat from './components/chatComponent';
+import { SocketManagerFactory } from './strategies/SocketStrategy';
+import { MessageProcessorFactory } from './strategies/MessageStrategy';
 
 function App() {
+  const [socket, setSocket] = useState(null);
   const [showChat, setShowChat] = useState(false);
+  const [socketManager, setSocketManager] = useState(null);
+  const [messageProcessor, setMessageProcessor] = useState(null);
+  const [connectionStatus, setConnectionStatus] = useState('disconnected');
+
+  useEffect(() => {
+    // Inicializar estratégias
+    const manager = SocketManagerFactory.createForEnvironment('development');
+    const processor = MessageProcessorFactory.createDefaultProcessor();
+    
+    setSocketManager(manager);
+    setMessageProcessor(processor);
+  }, []);
+
+  const joinRoom = (data) => {
+    if (socketManager && messageProcessor) {
+      try {
+        // Processar mensagem de sistema usando o messageProcessor
+        const systemMessage = messageProcessor.processMessage({
+          systemType: 'user_join',
+          content: `${data.username} entrou na sala`,
+          timestamp: new Date()
+        });
+
+        // Conectar ao socket
+        const connected = socketManager.connect();
+        if (connected) {
+          setConnectionStatus('connected');
+          setSocket(socketManager.socket);
+          setShowChat(true);
+          
+          // Emitir evento de entrada na sala
+          socketManager.emit('join_room', data);
+        } else {
+          setConnectionStatus('error');
+        }
+      } catch (error) {
+        console.error('Erro ao processar mensagem:', error);
+        setConnectionStatus('error');
+      }
+    }
+  };
 
   const handleStartChat = () => {
     const username = prompt('Digite seu nome de usuário:');
-    if (username?.trim()) {
-      setShowChat(true);
+    if (username && username.trim() !== '') {
+      joinRoom({ username: username.trim() });
     }
   };
 
   const handleBackToHome = () => {
+    if (socketManager) {
+      socketManager.disconnect();
+    }
     setShowChat(false);
+    setConnectionStatus('disconnected');
+    setSocket(null);
   };
 
+  // Se estamos na página inicial, mostrar a página de boas-vindas
   if (!showChat) {
     return (
       <div className="App">
         <main role="main">
           <div className="joinChatContainer">
+            <div className="connection-status">
+              <div className={`status-indicator ${connectionStatus}`}>
+                <div className="status-dot"></div>
+                <span className="status-text">
+                  {connectionStatus === 'connected' ? 'Conectado' : 
+                   connectionStatus === 'error' ? 'Erro de conexão' : 'Desconectado'}
+                </span>
+              </div>
+            </div>
+            
             <h1>💬 Chat RealTime</h1>
             <p className="subtitle">Aplicação de chat em tempo real com tecnologia moderna</p>
             
@@ -43,6 +103,7 @@ function App() {
               type="button"
               className="joinChatButton" 
               onClick={handleStartChat}
+              disabled={connectionStatus === 'error'}
               aria-label="Iniciar chat em tempo real"
             >
               🚀 Iniciar Chat
@@ -81,9 +142,15 @@ function App() {
     );
   }
 
+  // Se estamos no chat, mostrar o componente de chat
   return (
     <div className="App">
-      <Chat onBackToHome={handleBackToHome} />
+      <Chat 
+        socket={socket} 
+        messageProcessor={messageProcessor}
+        socketManager={socketManager}
+        onBackToHome={handleBackToHome}
+      />
     </div>
   );
 }

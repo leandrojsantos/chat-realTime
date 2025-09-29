@@ -2,6 +2,18 @@ const express = require('express');
 const cors = require('cors');
 const { Server } = require('socket.io');
 const path = require('path');
+const helmet = require('helmet');
+const compression = require('compression');
+const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+
+// Import routes
+const chatRoutes = require('./routes/chatRoutes');
+const userRoutes = require('./routes/userRoutes');
+const roomRoutes = require('./routes/roomRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 class App {
   constructor() {
@@ -53,10 +65,13 @@ class App {
       res.sendFile(path.join(__dirname, '../views/admin.html'));
     });
 
+    // Admin dashboard
+    this.app.use('/admin', adminRoutes);
+
     // API routes
-    this.app.use('/api/users', require('./routes/userRoutes'));
-    this.app.use('/api/rooms', require('./routes/roomRoutes'));
-    this.app.use('/api/chat', require('./routes/chatRoutes'));
+    this.app.use('/api/users', userRoutes);
+    this.app.use('/api/rooms', roomRoutes);
+    this.app.use('/api/chat', chatRoutes);
 
     // Swagger documentation
     this.app.get('/api-docs', (req, res) => {
