@@ -1,30 +1,7 @@
 const express = require('express');
 const cors = require('cors');
-const helmet = require('helmet');
-const compression = require('compression');
-const morgan = require('morgan');
-const rateLimit = require('express-rate-limit');
-const swaggerJsdoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
 const { Server } = require('socket.io');
-const mongoose = require('mongoose');
-const redis = require('redis');
-const winston = require('winston');
 const path = require('path');
-
-// Logger
-const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.json()
-  ),
-  transports: [
-    new winston.transports.Console({
-      format: winston.format.simple()
-    })
-  ]
-});
 
 class App {
   constructor() {
@@ -32,78 +9,42 @@ class App {
     this.port = process.env.PORT || 3001;
     this.server = require('http').createServer(this.app);
 
-    this.initializeSwagger();
     this.initializeMiddlewares();
     this.initializeRoutes();
-    this.initializeDatabase();
     this.initializeSocket();
   }
 
-  initializeSwagger() {
-    const swaggerOptions = {
-      definition: {
-        openapi: '3.0.0',
-        info: {
-          title: 'Chat API',
-          version: '2.0.0',
-          description: 'API para sistema de chat em tempo real',
-        },
-        servers: [
-          {
-            url: `http://localhost:${this.port}`,
-            description: 'Servidor de desenvolvimento',
-          },
-        ],
-      },
-      apis: ['./src/routes/*.js'],
-    };
-
-    const swaggerSpec = swaggerJsdoc(swaggerOptions);
-    this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-  }
-
   initializeMiddlewares() {
-    // Security middleware
-    this.app.use(helmet());
-
     // CORS configuration
     this.app.use(cors({
       origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
       credentials: true,
     }));
 
-    // Compression
-    this.app.use(compression());
-
-    // Logging
-    this.app.use(morgan('combined', {
-      stream: { write: (message) => logger.info(message.trim()) },
-    }));
-
-    // Rate limiting
-    const limiter = rateLimit({
-      windowMs: 15 * 60 * 1000, // 15 minutes
-      max: 100, // limit each IP to 100 requests per windowMs
-      message: 'Muitas requisições deste IP, tente novamente em 15 minutos.',
+    // Security headers
+    
+    this.app.use((req, res, next) => {
+      res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+      next();
     });
-    this.app.use('/api/', limiter);
 
     // Static files
     this.app.use(express.static('public'));
 
     // Body parsing
-    this.app.use(express.json({ limit: '10mb' }));
+    this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
   }
 
   initializeRoutes() {
     // Health check
     this.app.get('/health', (req, res) => {
-      res.json({
-        status: 'healthy',
+      res.json({ 
+        status: 'healthy', 
         timestamp: new Date().toISOString(),
         uptime: process.uptime(),
-        memory: process.memoryUsage(),
+        memory: process.memoryUsage()
       });
     });
 
@@ -117,13 +58,11 @@ class App {
     this.app.use('/api/rooms', require('./routes/roomRoutes'));
     this.app.use('/api/chat', require('./routes/chatRoutes'));
 
-    // Root endpoint
-    this.app.get('/', (req, res) => {
-      res.json({
-        message: 'Chat API v2.0.0',
-        health: '/health',
-        documentation: '/api-docs',
-        admin: '/admin',
+    // Swagger documentation
+    this.app.get('/api-docs', (req, res) => {
+      res.json({ 
+        message: 'Swagger UI disponível em /api-docs/',
+        swagger: 'swagger-ui'
       });
     });
 
@@ -131,25 +70,18 @@ class App {
     this.app.get('/docs', (req, res) => {
       res.redirect('/api-docs');
     });
+
+    // Root endpoint
+    this.app.get('/', (req, res) => {
+      res.json({ 
+        message: 'Chat API v2.0.0', 
+        admin: '/admin',
+        health: '/health',
+        documentation: '/api-docs'
+      });
+    });
   }
 
-  async initializeDatabase() {
-    try {
-      // MongoDB
-      const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/chatdb';
-      await mongoose.connect(mongoUri);
-      logger.info('Conectado ao MongoDB');
-
-      // Redis
-      const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
-      this.redisClient = redis.createClient({ url: redisUrl });
-      await this.redisClient.connect();
-      logger.info('Conectado ao Redis');
-    } catch (error) {
-      logger.error('Erro ao conectar com banco de dados:', error);
-      process.exit(1);
-    }
-  }
 
   initializeSocket() {
     this.io = new Server(this.server, {
@@ -158,77 +90,41 @@ class App {
         methods: ['GET', 'POST'],
         credentials: true,
       },
-      transports: ['websocket', 'polling'],
     });
 
     this.io.on('connection', (socket) => {
-      logger.info(`Usuário conectado: ${socket.id}`);
+      console.log(`Usuário conectado: ${socket.id}`);
       
-      // Evento: Entrar em sala
-      socket.on('join_room', (data) => {
-        try {
-          const { room } = data;
-          socket.join(room);
-          logger.info(`Usuário ${socket.id} entrou na sala ${room}`);
-        } catch (error) {
-          logger.error('Erro ao entrar na sala:', error);
-          socket.emit('error', { message: 'Erro ao entrar na sala' });
-        }
-      });
-
       // Evento: Enviar mensagem
       socket.on('send_message', (data) => {
-        try {
-          const { room, message, author, email, dateBirthDay, time } = data;
-          
-          // Enviar mensagem para todos na sala
-          socket.to(room).emit('receive_message', {
-            room,
-            message,
-            author,
-            email,
-            dateBirthDay,
-            time
-          });
-          
-          logger.info(`Mensagem enviada na sala ${room} por ${author}`);
-        } catch (error) {
-          logger.error('Erro ao enviar mensagem:', error);
-          socket.emit('error', { message: 'Erro ao enviar mensagem' });
-        }
+        socket.broadcast.emit('receive_message', data);
+      });
+
+      // Evento: Digitação
+      socket.on('typing', (data) => {
+        socket.broadcast.emit('typing', data);
+      });
+
+      // Evento: Parar de digitar
+      socket.on('stop_typing', (data) => {
+        socket.broadcast.emit('stop_typing', data);
       });
 
       // Evento: Desconectar
       socket.on('disconnect', () => {
-        logger.info(`Usuário desconectado: ${socket.id}`);
+        console.log(`Usuário desconectado: ${socket.id}`);
       });
     });
 
-    logger.info('Socket.IO inicializado');
+    console.log('Socket.IO inicializado');
   }
 
   async start() {
-    try {
-      this.server.listen(this.port, () => {
-        logger.info(`Servidor rodando na porta ${this.port}`);
-      });
-    } catch (error) {
-      logger.error('Erro ao iniciar servidor:', error);
-      process.exit(1);
-    }
+    this.server.listen(this.port, () => {
+      console.log(`Servidor rodando na porta ${this.port}`);
+    });
   }
 }
-
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  logger.info('SIGTERM recebido, encerrando servidor graciosamente');
-  process.exit(0);
-});
-
-process.on('SIGINT', () => {
-  logger.info('SIGINT recebido, encerrando servidor graciosamente');
-  process.exit(0);
-});
 
 // Export the class for testing
 module.exports = App;
