@@ -28,7 +28,7 @@ describe('Classe App', () => {
       expect(app).toBeDefined();
       expect(app.app).toBeDefined();
       expect(app.server).toBeDefined();
-      expect(app.port).toBe(3001);
+      expect(app.port).toBe(process.env.PORT || 3001);
     });
 
     test('deve configurar middlewares de segurança', async () => {

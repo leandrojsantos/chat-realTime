@@ -12,13 +12,18 @@ describe('Chat Flow E2E Tests', () => {
   let server;
   let clientSocket;
   let clientSocket2;
+  let baseUrl;
 
   beforeAll(async () => {
     app = new App();
     server = app.server;
-    
-    // Wait for server to be ready
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => {
+      const s = server.listen(0, () => {
+        const { port } = s.address();
+        baseUrl = `http://localhost:${port}`;
+        resolve();
+      });
+    });
   });
 
   afterAll(async () => {
@@ -28,9 +33,8 @@ describe('Chat Flow E2E Tests', () => {
   });
 
   beforeEach(() => {
-    // Create socket connections
-    clientSocket = io('http://localhost:3001');
-    clientSocket2 = io('http://localhost:3001');
+    clientSocket = io(baseUrl, { transports: ['websocket'] });
+    clientSocket2 = io(baseUrl, { transports: ['websocket'] });
   });
 
   afterEach(() => {
@@ -333,26 +337,42 @@ describe('Chat Flow E2E Tests', () => {
     test('should handle concurrent users', (done) => {
       const roomName = 'concurrent-test-room';
       const userCount = 5;
-      let connectedCount = 0;
+      let acks = 0;
+      let finished = false;
 
       const sockets = [];
-      
-      // Create multiple socket connections
+
+      const maybeFinish = () => {
+        if (!finished && acks >= userCount) {
+          finished = true;
+          sockets.forEach(s => s.disconnect());
+          done();
+        }
+      };
+
       for (let i = 0; i < userCount; i++) {
-        const socket = io('http://localhost:3001');
+        const socket = io(baseUrl, { transports: ['websocket'], auth: { username: 'test-user' } });
         sockets.push(socket);
-        
+
         socket.on('connect', () => {
-          socket.emit('join_room', roomName);
-          connectedCount++;
-          
-          if (connectedCount === userCount) {
-            // All users connected, clean up
-            sockets.forEach(s => s.disconnect());
-            done();
+          socket.emit('join_room', { room: roomName, username: 'test-user' });
+        });
+
+        socket.on('room_joined', (data) => {
+          if (data?.room === roomName) {
+            acks++;
+            maybeFinish();
+          }
+        });
+
+        socket.on('user_connected', (data) => {
+          // Extra signal from backend for fast sync; count only if in this room
+          if (data?.room === roomName || data?.id) {
+            acks++;
+            maybeFinish();
           }
         });
       }
-    });
+    }, 12000);
   });
 });

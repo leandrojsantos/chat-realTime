@@ -217,7 +217,7 @@ function Chat({ socket, messageProcessor, socketManager, onBackToHome }) {
   }, [socket, username, room, messageProcessor, socketManager]);
 
   return (
-    <div className="chat-window" role="application" aria-label="Chat em tempo real">
+    <div className="chat-window" role="application" aria-label="Chat em tempo real" data-testid="chat-component">
       <header className="chat-header" role="banner">
         <h1>💬 Chat RealTime</h1>
         <p>Sala: {room}</p>

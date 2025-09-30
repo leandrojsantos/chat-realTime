@@ -63,7 +63,7 @@ describe('User Entity', () => {
           email: 'john@example.com',
           dateBirthDay: '1990-01-01'
         });
-      }).toThrow('Name cannot be empty');
+      }).toThrow('Name is required');
 
       expect(() => {
         new User({

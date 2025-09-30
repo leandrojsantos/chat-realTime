@@ -1,15 +1,14 @@
 const request = require('supertest');
-const app = require('../../src/app');
+const App = require('../../src/app');
 
 describe('Admin Dashboard E2E Tests', () => {
   let server;
+  let app;
 
   beforeAll(async () => {
-    // Start the server
+    app = new App();
     server = app.server;
-    
-    // Wait for server to be ready
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 100));
   });
 
   afterAll(async () => {

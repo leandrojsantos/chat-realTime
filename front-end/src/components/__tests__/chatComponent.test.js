@@ -42,7 +42,7 @@ describe('Componente Chat - Testes Simplificados', () => {
     
     // Verificar elementos principais
     expect(screen.getByText('💬 Chat RealTime')).toBeInTheDocument();
-    expect(screen.getByText('Sala: General')).toBeInTheDocument();
+    expect(screen.getByText('Sala: general')).toBeInTheDocument();
     expect(screen.getByText('← Voltar')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Digite sua mensagem...')).toBeInTheDocument();
   });

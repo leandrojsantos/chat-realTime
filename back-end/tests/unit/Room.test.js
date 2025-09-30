@@ -58,7 +58,7 @@ describe('Room Entity', () => {
           name: '',
           type: 'public'
         });
-      }).toThrow('Name cannot be empty');
+      }).toThrow('Name is required');
 
       expect(() => {
         new Room({

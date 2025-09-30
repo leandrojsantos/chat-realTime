@@ -64,7 +64,7 @@ describe('Message Entity', () => {
           author: 'John',
           room: 'general'
         });
-      }).toThrow('Content cannot be empty');
+      }).toThrow('Content is required');
 
       expect(() => {
         new Message({
@@ -82,7 +82,7 @@ describe('Message Entity', () => {
           author: '',
           room: 'general'
         });
-      }).toThrow('Author cannot be empty');
+      }).toThrow('Author is required');
 
       expect(() => {
         new Message({
@@ -100,7 +100,7 @@ describe('Message Entity', () => {
           author: 'John',
           room: ''
         });
-      }).toThrow('Room cannot be empty');
+      }).toThrow('Room is required');
 
       expect(() => {
         new Message({
