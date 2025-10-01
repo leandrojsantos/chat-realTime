@@ -2,12 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const { Server } = require('socket.io');
 const path = require('path');
-const helmet = require('helmet');
-const compression = require('compression');
-const morgan = require('morgan');
-const rateLimit = require('express-rate-limit');
-const swaggerJsdoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
 
 // Import routes
 const chatRoutes = require('./routes/chatRoutes');
@@ -34,15 +28,11 @@ class App {
     }));
 
     // Security headers
-    
     this.app.use((req, res, next) => {
       res.setHeader('X-Content-Type-Options', 'nosniff');
       res.setHeader('X-Frame-Options', 'SAMEORIGIN');
       next();
     });
-
-    // Static files
-    this.app.use(express.static('public'));
 
     // Body parsing
     this.app.use(express.json());
@@ -73,17 +63,18 @@ class App {
     this.app.use('/api/rooms', roomRoutes);
     this.app.use('/api/chat', chatRoutes);
 
-    // Swagger documentation
+    // API documentation
     this.app.get('/api-docs', (req, res) => {
       res.json({ 
-        message: 'Swagger UI disponível em /api-docs/',
-        swagger: 'swagger-ui'
+        message: 'API Documentation',
+        endpoints: {
+          health: '/health',
+          admin: '/admin',
+          users: '/api/users',
+          rooms: '/api/rooms',
+          chat: '/api/chat'
+        }
       });
-    });
-
-    // Redirect /docs to /api-docs
-    this.app.get('/docs', (req, res) => {
-      res.redirect('/api-docs');
     });
 
     // Root endpoint

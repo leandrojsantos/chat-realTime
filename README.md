@@ -1,6 +1,5 @@
 # 💬 Chat RealTime - Comunicação em Tempo Real
 
-> **Aplicação de chat em tempo real com tecnologia moderna, arquitetura limpa e testes abrangentes**
 
 [![Node.js](https://img.shields.io/badge/Node.js-20+-green.svg)](https://nodejs.org/)
 [![React](https://img.shields.io/badge/React-18+-blue.svg)](https://reactjs.org/)
@@ -48,7 +47,7 @@
 
 ### 🏗️ **Arquitetura**
 - ✅ Clean Architecture
-- ✅ Padrões de Design (Strategy, Factory)
+- ✅ Código simples e direto (KISS)
 - ✅ Separação de responsabilidades
 - ✅ Código modular e testável
 
@@ -161,8 +160,6 @@ chat-realTime/
 - **Node.js** 20+ - Runtime JavaScript
 - **Express.js** - Framework web
 - **Socket.IO** - Comunicação em tempo real
-- **MongoDB** - Banco de dados
-- **Redis** - Cache e sessões
 - **Jest** - Framework de testes
 - **Supertest** - Testes de API
 
@@ -174,8 +171,6 @@ chat-realTime/
 - **React Testing Library** - Testes de componentes
 
 ### **DevOps**
-- **Docker** - Containerização
-- **Docker Compose** - Orquestração
 - **Yarn** - Gerenciador de pacotes
 
 ---
@@ -192,39 +187,3 @@ chat-realTime/
 | **Documentação** | ✅ Completa | 100% | READMEs atualizados |
 
 ---
-
-## 🚀 **Próximos Passos**
-
-- [ ] Implementar autenticação JWT
-- [ ] Adicionar notificações push
-- [ ] Implementar upload de arquivos
-- [ ] Adicionar temas dark/light
-- [ ] Implementar busca de mensagens
-- [ ] Adicionar emojis e reações
-- [ ] Implementar histórico de mensagens
-- [ ] Adicionar notificações de sistema
-
----
-
-## 📝 **Licença**
-
-MIT License - veja o arquivo [LICENSE](LICENSE) para detalhes.
----
-
-## 👥 **Contribuição**
-
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
----
-
-## 📞 **Suporte**
-
-Para suporte, abra uma issue no GitHub ou entre em contato via email.
-
----
-
-**Desenvolvido com ❤️ usando tecnologias modernas**

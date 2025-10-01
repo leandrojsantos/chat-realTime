@@ -1,34 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import useSocket from '../hooks/useSocket';
-import useMessages from '../hooks/useMessages';
-import useTyping from '../hooks/useTyping';
 import Button from './Button';
 import Input from './Input';
 import Message from './Message';
 import TypingIndicator from './TypingIndicator';
 
-function Chat({ socket, messageProcessor, socketManager, onBackToHome }) {
+function Chat({ socket, onBackToHome }) {
   const [currentMessage, setCurrentMessage] = useState('');
   const [messageList, setMessageList] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const [typingUsers, setTypingUsers] = useState([]);
-  const [username] = useState('Usuário'); // Default username
-  const [room] = useState('general'); // Default room
+  const [username] = useState('Usuário');
+  const [room] = useState('general');
 
   const sendMessage = async () => {
     if (currentMessage.trim() !== "") {
       try {
-        // Process message using strategy pattern if available
-        const messageData = messageProcessor ? messageProcessor.processMessage({
-          type: 'text',
-          room: room,
-          author: username,
-          message: currentMessage.trim(),
-          time: new Date().toLocaleTimeString('pt-BR', { 
-            hour: '2-digit', 
-            minute: '2-digit' 
-          })
-        }) : {
+        const messageData = {
           message: currentMessage.trim(),
           author: username,
           room: room,
@@ -38,21 +25,12 @@ function Chat({ socket, messageProcessor, socketManager, onBackToHome }) {
           })
         };
 
-        if (socketManager) {
-          socketManager.emit("send_message", messageData);
-        } else if (socket) {
-          socket.emit('send_message', messageData);
-        }
-        
+        socket.emit('send_message', messageData);
         setMessageList((list) => [...list, messageData]);
         setCurrentMessage("");
         
         // Stop typing indicator
-        if (socketManager) {
-          socketManager.emit("stop_typing", { room, username });
-        } else if (socket) {
-          socket.emit('stop_typing', { room, username });
-        }
+        socket.emit('stop_typing', { room, username });
         setIsTyping(false);
       } catch (error) {
         console.error("Error sending message:", error);
@@ -66,23 +44,15 @@ function Chat({ socket, messageProcessor, socketManager, onBackToHome }) {
     
     if (!isTyping) {
       setIsTyping(true);
-      if (socketManager) {
-        socketManager.emit("typing", { room, username });
-      } else if (socket) {
-        socket.emit('typing', { room, username });
-      }
+      socket.emit('typing', { room, username });
     }
     
     // Clear typing timeout
     clearTimeout(window.typingTimeout);
     window.typingTimeout = setTimeout(() => {
       setIsTyping(false);
-      if (socketManager) {
-        socketManager.emit("stop_typing", { room, username });
-      } else if (socket) {
-        socket.emit('stop_typing', { room, username });
-      }
-    }, 1000);
+      socket.emit('stop_typing', { room, username });
+    }, 3000);
   };
 
   const handleKeyPress = (e) => {
@@ -92,17 +62,11 @@ function Chat({ socket, messageProcessor, socketManager, onBackToHome }) {
   };
 
   useEffect(() => {
+    if (!socket) return;
+
     // Message listeners
     const handleReceiveMessage = (data) => {
-      try {
-        // Process received message using strategy pattern if available
-        const processedMessage = messageProcessor ? messageProcessor.processMessage(data) : data;
-        setMessageList((list) => [...list, processedMessage]);
-      } catch (error) {
-        console.error("Error processing received message:", error);
-        // Fallback to original data if processing fails
-        setMessageList((list) => [...list, data]);
-      }
+      setMessageList((list) => [...list, data]);
     };
 
     const handleTyping = (data) => {
@@ -179,19 +143,11 @@ function Chat({ socket, messageProcessor, socketManager, onBackToHome }) {
     };
 
     // Add event listeners
-    if (socketManager) {
-      socketManager.addEventListener('receive_message', handleReceiveMessage);
-      socketManager.addEventListener('typing', handleTyping);
-      socketManager.addEventListener('stop_typing', handleStopTyping);
-      socketManager.addEventListener('user_joined', handleUserJoined);
-      socketManager.addEventListener('user_left', handleUserLeft);
-    } else if (socket) {
-      socket.on('receive_message', handleReceiveMessage);
-      socket.on('typing', handleTyping);
-      socket.on('stop_typing', handleStopTyping);
-      socket.on('user_joined', handleUserJoined);
-      socket.on('user_left', handleUserLeft);
-    }
+    socket.on('receive_message', handleReceiveMessage);
+    socket.on('user_typing', handleTyping);
+    socket.on('user_stop_typing', handleStopTyping);
+    socket.on('user_joined', handleUserJoined);
+    socket.on('user_left', handleUserLeft);
 
     // Cleanup on unmount
     return () => {
@@ -214,7 +170,7 @@ function Chat({ socket, messageProcessor, socketManager, onBackToHome }) {
         clearTimeout(window.typingTimeout);
       }
     };
-  }, [socket, username, room, messageProcessor, socketManager]);
+  }, [socket, username, room]);
 
   return (
     <div className="chat-window" role="application" aria-label="Chat em tempo real" data-testid="chat-component">

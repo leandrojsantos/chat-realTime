@@ -1,51 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Chat from './components/chatComponent';
-import { SocketManagerFactory } from './strategies/SocketStrategy';
-import { MessageProcessorFactory } from './strategies/MessageStrategy';
+import { io } from 'socket.io-client';
 
 function App() {
   const [socket, setSocket] = useState(null);
   const [showChat, setShowChat] = useState(false);
-  const [socketManager, setSocketManager] = useState(null);
-  const [messageProcessor, setMessageProcessor] = useState(null);
   const [connectionStatus, setConnectionStatus] = useState('disconnected');
 
-  useEffect(() => {
-    // Inicializar estratégias
-    const manager = SocketManagerFactory.createForEnvironment('development');
-    const processor = MessageProcessorFactory.createDefaultProcessor();
-    
-    setSocketManager(manager);
-    setMessageProcessor(processor);
-  }, []);
-
   const joinRoom = (data) => {
-    if (socketManager && messageProcessor) {
-      try {
-        // Processar mensagem de sistema usando o messageProcessor
-        const systemMessage = messageProcessor.processMessage({
-          systemType: 'user_join',
-          content: `${data.username} entrou na sala`,
-          timestamp: new Date()
-        });
-
-        // Conectar ao socket
-        const connected = socketManager.connect();
-        if (connected) {
-          setConnectionStatus('connected');
-          setSocket(socketManager.socket);
-          setShowChat(true);
-          
-          // Emitir evento de entrada na sala
-          socketManager.emit('join_room', data);
-        } else {
-          setConnectionStatus('error');
-        }
-      } catch (error) {
-        console.error('Erro ao processar mensagem:', error);
-        setConnectionStatus('error');
-      }
+    const newSocket = io('http://localhost:3001');
+    if (newSocket) {
+      setConnectionStatus('connected');
+      setSocket(newSocket);
+      setShowChat(true);
+      newSocket.emit('join_room', data);
+    } else {
+      setConnectionStatus('error');
     }
   };
 
@@ -57,8 +28,8 @@ function App() {
   };
 
   const handleBackToHome = () => {
-    if (socketManager) {
-      socketManager.disconnect();
+    if (socket) {
+      socket.disconnect();
     }
     setShowChat(false);
     setConnectionStatus('disconnected');
@@ -147,8 +118,6 @@ function App() {
     <div className="App">
       <Chat 
         socket={socket} 
-        messageProcessor={messageProcessor}
-        socketManager={socketManager}
         onBackToHome={handleBackToHome}
       />
     </div>

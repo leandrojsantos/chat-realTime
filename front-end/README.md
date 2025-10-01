@@ -26,7 +26,7 @@
 
 ### 🏗️ **Arquitetura**
 - ✅ Clean Architecture
-- ✅ Padrões Strategy e Factory
+- ✅ Código simples e direto (KISS)
 - ✅ Componentes reutilizáveis
 - ✅ Separação de responsabilidades
 
@@ -192,38 +192,34 @@ Gerencia indicadores de digitação com:
 
 ---
 
-## 🏗️ **Padrões de Design**
+## 🏗️ **Arquitetura Simplificada**
 
-### **Strategy Pattern**
+### **Componentes Reutilizáveis**
 ```javascript
-// MessageStrategy.js
-export class MessageStrategy {
-  processMessage(message) {
-    // Processamento específico
-  }
-}
-
-// SocketStrategy.js
-export class SocketStrategy {
-  connect() {
-    // Conexão específica
-  }
-}
+// Button.js - Componente simples e reutilizável
+const Button = ({ children, onClick, disabled }) => {
+  return (
+    <button onClick={onClick} disabled={disabled}>
+      {children}
+    </button>
+  );
+};
 ```
 
-### **Factory Pattern**
+### **Hooks Customizados**
 ```javascript
-// SocketManagerFactory
-export class SocketManagerFactory {
-  static createForEnvironment(env) {
-    switch(env) {
-      case 'development':
-        return new DevelopmentSocketManager();
-      case 'production':
-        return new ProductionSocketManager();
-    }
-  }
-}
+// useSocket.js - Hook simples para Socket.IO
+const useSocket = (url) => {
+  const [socket, setSocket] = useState(null);
+  
+  useEffect(() => {
+    const newSocket = io(url);
+    setSocket(newSocket);
+    return () => newSocket.close();
+  }, [url]);
+  
+  return socket;
+};
 ```
 
 ---

@@ -74,22 +74,25 @@ describe('Classe App', () => {
       expect(response.body).toHaveProperty('admin', '/admin');
     });
 
-    test('deve redirecionar /docs para /api-docs', async () => {
+    test('deve retornar documentação da API', async () => {
       const response = await request(app.app)
-        .get('/docs')
-        .expect(302);
+        .get('/api-docs')
+        .expect(200);
 
-      expect(response.headers.location).toBe('/api-docs');
+      expect(response.body.message).toBe('API Documentation');
+      expect(response.body.endpoints).toBeDefined();
     });
   });
 
-  describe('Configuração do Swagger', () => {
-    test('deve configurar o Swagger UI', async () => {
+  describe('Configuração da API', () => {
+    test('deve retornar endpoints disponíveis', async () => {
       const response = await request(app.app)
-        .get('/api-docs/')
+        .get('/api-docs')
         .expect(200);
 
-      expect(response.text).toContain('swagger-ui');
+      expect(response.body.endpoints.health).toBe('/health');
+      expect(response.body.endpoints.admin).toBe('/admin');
+      expect(response.body.endpoints.users).toBe('/api/users');
     });
   });
 
